@@ -3,19 +3,15 @@ package com.razoryield.gateway;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
-import jakarta.annotation.PostConstruct;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 /**
  * Creates Razorpay payment links for approved campaigns. Reached only after the policy gate has
  * passed and, above the auto-dispatch thresholds, after a merchant has approved.
  */
-@Service
-public class RazorpayGatewayService {
+public class RazorpayGatewayService implements PaymentGateway {
 
     private static final Logger log = LoggerFactory.getLogger(RazorpayGatewayService.class);
 
@@ -24,13 +20,16 @@ public class RazorpayGatewayService {
 
     private RazorpayClient razorpayClient;
 
-    public RazorpayGatewayService(@Value("${razorpay.api.key:}") String apiKey,
-                                  @Value("${razorpay.api.secret:}") String apiSecret) {
+    public RazorpayGatewayService(String apiKey, String apiSecret) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
     }
 
-    @PostConstruct
+    @Override
+    public String mode() {
+        return "RAZORPAY TEST MODE (" + apiKey + ")";
+    }
+
     void initialiseClient() {
         if (apiKey.isBlank() || apiSecret.isBlank()) {
             log.warn("Razorpay credentials are not configured. Payment link creation will fail until they are set.");
@@ -55,6 +54,7 @@ public class RazorpayGatewayService {
      * @param offerPricePaise  the amount, in paise, exactly as Razorpay expects it
      * @return the payment link id, for example {@code plink_ABC123}
      */
+    @Override
     public String createPaymentLink(String campaignId, String sku, long offerPricePaise, String customerPhone) {
         if (razorpayClient == null) {
             throw new PaymentGatewayException("Razorpay client is not initialised; check razorpay.api.key and razorpay.api.secret.");

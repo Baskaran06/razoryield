@@ -9,7 +9,7 @@ import com.razoryield.domain.CustomerCohort;
 import com.razoryield.domain.CustomerCohortRepository;
 import com.razoryield.domain.Product;
 import com.razoryield.domain.ProductRepository;
-import com.razoryield.gateway.RazorpayGatewayService;
+import com.razoryield.gateway.PaymentGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,20 +43,20 @@ public class CampaignApprovalController {
 
     private final CampaignRepository campaignRepository;
     private final AuditService auditService;
-    private final RazorpayGatewayService razorpayGatewayService;
+    private final PaymentGateway paymentGateway;
     private final ProductRepository productRepository;
     private final CustomerCohortRepository cohortRepository;
     private final String merchantApiKey;
 
     public CampaignApprovalController(CampaignRepository campaignRepository,
                                       AuditService auditService,
-                                      RazorpayGatewayService razorpayGatewayService,
+                                      PaymentGateway paymentGateway,
                                       ProductRepository productRepository,
                                       CustomerCohortRepository cohortRepository,
                                       @Value("${merchant.api.key:}") String merchantApiKey) {
         this.campaignRepository = campaignRepository;
         this.auditService = auditService;
-        this.razorpayGatewayService = razorpayGatewayService;
+        this.paymentGateway = paymentGateway;
         this.productRepository = productRepository;
         this.cohortRepository = cohortRepository;
         this.merchantApiKey = merchantApiKey;
@@ -84,7 +84,7 @@ public class CampaignApprovalController {
                 .map(CustomerCohort::getPhoneNumber)
                 .orElse(FALLBACK_CONTACT);
 
-        String linkId = razorpayGatewayService.createPaymentLink(
+        String linkId = paymentGateway.createPaymentLink(
                 campaign.getId().toString(), campaign.getSku(), campaign.getOfferPricePaise(), contact);
 
         campaign.setStatus(CampaignStatus.APPROVED);

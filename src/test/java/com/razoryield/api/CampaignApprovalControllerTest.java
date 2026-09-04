@@ -8,7 +8,7 @@ import com.razoryield.domain.CampaignStatus;
 import com.razoryield.domain.CustomerCohortRepository;
 import com.razoryield.domain.ProductRepository;
 import com.razoryield.gateway.PaymentGatewayException;
-import com.razoryield.gateway.RazorpayGatewayService;
+import com.razoryield.gateway.PaymentGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class CampaignApprovalControllerTest {
     AuditService auditService;
 
     @MockitoBean
-    RazorpayGatewayService razorpayGatewayService;
+    PaymentGateway paymentGateway;
 
     @MockitoBean
     ProductRepository productRepository;
@@ -82,7 +82,7 @@ class CampaignApprovalControllerTest {
     @DisplayName("A: a valid key on a pending campaign dispatches a payment link")
     void approvesPendingCampaign() throws Exception {
         givenCampaignIn(CampaignStatus.PENDING_MERCHANT_APPROVAL);
-        when(razorpayGatewayService.createPaymentLink(anyString(), anyString(), anyLong(), anyString()))
+        when(paymentGateway.createPaymentLink(anyString(), anyString(), anyLong(), anyString()))
                 .thenReturn("plink_test123");
 
         mockMvc.perform(post("/api/v1/campaigns/{id}/approve", campaignId)
@@ -92,7 +92,7 @@ class CampaignApprovalControllerTest {
                 .andExpect(jsonPath("$.razorpayLinkId").value("plink_test123"))
                 .andExpect(jsonPath("$.offerPricePaise").value(300_000L));
 
-        verify(razorpayGatewayService).createPaymentLink(campaignId.toString(), "SKU-KETTLE-1L", 300_000L, "+910000000000");
+        verify(paymentGateway).createPaymentLink(campaignId.toString(), "SKU-KETTLE-1L", 300_000L, "+910000000000");
 
         ArgumentCaptor<CampaignAuditLog> captor = ArgumentCaptor.forClass(CampaignAuditLog.class);
         verify(auditService).append(captor.capture());
@@ -108,7 +108,7 @@ class CampaignApprovalControllerTest {
         mockMvc.perform(post("/api/v1/campaigns/{id}/approve", campaignId))
                 .andExpect(status().isUnauthorized());
 
-        verifyNoInteractions(campaignRepository, razorpayGatewayService, auditService);
+        verifyNoInteractions(campaignRepository, paymentGateway, auditService);
     }
 
     @Test
@@ -118,7 +118,7 @@ class CampaignApprovalControllerTest {
                         .header("X-Merchant-Key", "mk_test_wrong"))
                 .andExpect(status().isUnauthorized());
 
-        verifyNoInteractions(campaignRepository, razorpayGatewayService, auditService);
+        verifyNoInteractions(campaignRepository, paymentGateway, auditService);
     }
 
     @Test
@@ -130,7 +130,7 @@ class CampaignApprovalControllerTest {
                         .header("X-Merchant-Key", MERCHANT_KEY))
                 .andExpect(status().isConflict());
 
-        verifyNoInteractions(razorpayGatewayService);
+        verifyNoInteractions(paymentGateway);
         verify(auditService, never()).append(any());
     }
 
@@ -143,7 +143,7 @@ class CampaignApprovalControllerTest {
                         .header("X-Merchant-Key", MERCHANT_KEY))
                 .andExpect(status().isConflict());
 
-        verifyNoInteractions(razorpayGatewayService);
+        verifyNoInteractions(paymentGateway);
     }
 
     @Test
@@ -155,14 +155,14 @@ class CampaignApprovalControllerTest {
                         .header("X-Merchant-Key", MERCHANT_KEY))
                 .andExpect(status().isNotFound());
 
-        verifyNoInteractions(razorpayGatewayService);
+        verifyNoInteractions(paymentGateway);
     }
 
     @Test
     @DisplayName("a gateway failure surfaces as 502 and leaves no approval audit row")
     void gatewayFailureIsBadGateway() throws Exception {
         givenCampaignIn(CampaignStatus.PENDING_MERCHANT_APPROVAL);
-        when(razorpayGatewayService.createPaymentLink(anyString(), anyString(), anyLong(), anyString()))
+        when(paymentGateway.createPaymentLink(anyString(), anyString(), anyLong(), anyString()))
                 .thenThrow(new PaymentGatewayException("Razorpay rejected the payment link: Authentication failed"));
 
         mockMvc.perform(post("/api/v1/campaigns/{id}/approve", campaignId)

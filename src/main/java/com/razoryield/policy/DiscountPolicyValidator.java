@@ -102,6 +102,24 @@ public class DiscountPolicyValidator {
                 discountPaise, sku, newTotal, DAILY_BUDGET_CAP_PAISE);
     }
 
+    /** Discount reserved so far today, for display. Returns 0 when nothing has been spent yet. */
+    public long consumedTodayPaise() {
+        String value = stringRedisTemplate.opsForValue().get(budgetKeyForToday());
+        if (value == null || value.isBlank()) {
+            return 0L;
+        }
+        try {
+            return Long.parseLong(value.trim());
+        } catch (NumberFormatException e) {
+            log.warn("Budget key held a non-numeric value: {}", value);
+            return 0L;
+        }
+    }
+
+    public int globalMinMarginPct() {
+        return globalMinMarginPct;
+    }
+
     String budgetKeyForToday() {
         return BUDGET_KEY_PREFIX + LocalDate.now(BUDGET_ZONE).format(DAY_FORMAT);
     }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Settings — RazorYield Merchant Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+                <div class="brand-title">RazorYield</div>
+                <div class="brand-subtitle">Flash Sale Orchestrator</div>
+            </div>
+        </div>
+
+        <ul class="nav-list">
+            <li><a th:href="@{/}" class="nav-link"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</span></a></li>
+            <li><a th:href="@{/campaigns}" class="nav-link"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Campaigns</span></a></li>
+            <li><a th:href="@{/inventory}" class="nav-link"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>Inventory</span></a></li>
+            <li><a th:href="@{/payments}" class="nav-link"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Payments</span></a></li>
+            <li><a th:href="@{/activity}" class="nav-link"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Activity audit</span></a></li>
+            <li><a th:href="@{/settings}" class="nav-link active"><span class="nav-link-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings &amp; key</span></a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h1 class="page-title">Merchant settings &amp; security</h1>
+            <div class="topbar-actions">
+                <a th:href="@{/}" class="btn btn-outline">← Back to Overview</a>
+            </div>
+        </header>
+
+        <div class="page-body">
+            <!-- Merchant Key Configuration -->
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Merchant authentication key</h2>
+                        <div class="panel-subtitle">Protected authorization key required when approving flash-sale campaigns exceeding automated boundaries.</div>
+                    </div>
+                </div>
+
+                <div style="padding:1.5rem;">
+                    <div style="max-width:500px;">
+                        <label for="settingsKeyInput" style="display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.5rem;">Current merchant key</label>
+                        <input id="settingsKeyInput" type="password" class="btn btn-outline" style="width:100%; text-align:left; font-family:var(--font-heading); margin-bottom:1rem;" placeholder="Enter merchant key"/>
+                        <button id="saveKeyBtn" class="btn btn-emerald" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            Save merchant key
+                        </button>
+                        <div id="saveBanner" style="margin-top:0.75rem; font-size:0.8rem; color:var(--color-emerald-profit); display:none;">
+                            ✓ Merchant authorization key updated successfully.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configured Financial Policy Limits -->
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Configured financial guardrails</h2>
+                        <div class="panel-subtitle">Deterministic limits enforced automatically before any payment link can be generated.</div>
+                    </div>
+                </div>
+
+                <div style="padding:1.5rem; display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.25rem;">
+                    <div style="background:var(--color-bg-canvas); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--color-border-line);">
+                        <div style="font-size:0.8rem; color:var(--color-text-muted);">Global minimum margin floor</div>
+                        <div class="number-font" style="font-size:1.6rem; font-weight:700; color:var(--color-text-title);" th:text="${minMarginPct} + '%'">15%</div>
+                        <div style="font-size:0.75rem; color:var(--color-text-body); margin-top:0.35rem;">Offers selling below cost × 1.15 are automatically rejected.</div>
+                    </div>
+
+                    <div style="background:var(--color-bg-canvas); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--color-border-line);">
+                        <div style="font-size:0.8rem; color:var(--color-text-muted);">Daily campaign discount cap</div>
+                        <div class="number-font" style="font-size:1.6rem; font-weight:700; color:var(--color-text-title);" th:text="'₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹20,000</div>
+                        <div style="font-size:0.75rem; color:var(--color-text-body); margin-top:0.35rem;">Guaranteed daily budget limit protection.</div>
+                    </div>
+
+                    <div style="background:var(--color-bg-canvas); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--color-border-line);">
+                        <div style="font-size:0.8rem; color:var(--color-text-muted);">Auto-dispatch ceiling</div>
+                        <div class="number-font" style="font-size:1.6rem; font-weight:700; color:var(--color-text-title);">10.00% / ₹500</div>
+                        <div style="font-size:0.75rem; color:var(--color-text-body); margin-top:0.35rem;">Discounts exceeding either limit pause for human merchant review.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+(function() {
+    const keyInput = document.getElementById('settingsKeyInput');
+    const saveBtn = document.getElementById('saveKeyBtn');
+    const saveBanner = document.getElementById('saveBanner');
+
+    keyInput.value = sessionStorage.getItem('ry_key') || 'mk_local_dev_key';
+
+    saveBtn.addEventListener('click', () => {
+        sessionStorage.setItem('ry_key', keyInput.value.trim());
+        saveBanner.style.display = 'block';
+        setTimeout(() => { saveBanner.style.display = 'none'; }, 2500);
+    });
+})();
+</script>
+
+</body>
+</html>

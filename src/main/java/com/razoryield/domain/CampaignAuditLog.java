@@ -150,6 +150,56 @@ public class CampaignAuditLog {
         return failureReason;
     }
 
+    public String getDisplayName() {
+        if (sku == null) return "Unknown Product";
+        return switch (sku) {
+            case "SKU-TEA-250G" -> "Organic Green Tea — 250g";
+            case "SKU-COFFEE-500G" -> "Premium Coffee — 500g";
+            case "SKU-SOAP-4PK" -> "Gentle Care Body Soap — 4 Pack";
+            case "SKU-RICE-10KG" -> "Basmati Rice — 10kg";
+            case "SKU-BULB-9W" -> "9W LED Smart Bulb";
+            case "SKU-HEADPHONE-BT" -> "Wireless Bluetooth Headphones";
+            case "SKU-KETTLE-1L" -> "1L Electric Water Kettle";
+            case "SKU-BACKPACK-30L" -> "30L Waterproof Travel Backpack";
+            case "SKU-YOGAMAT-6MM" -> "6mm Anti-Slip Yoga Mat";
+            case "SKU-LEGACY-PRINTER" -> "Compact Desktop Inkjet Printer";
+            default -> sku.replace("SKU-", "").replace("-", " ");
+        };
+    }
+
+    public String getHumanVerdict() {
+        if (gateVerdict == null) return "Recorded Event";
+        return switch (gateVerdict) {
+            case "PROPOSED" -> "Campaign Recommendation Created";
+            case "PENDING_MERCHANT_APPROVAL" -> "Merchant Approval Required";
+            case "AUTO_DISPATCHED" -> "Campaign Auto-Dispatched";
+            case "APPROVED" -> "Merchant Approved Campaign";
+            case "REJECTED_MARGIN_BREACH" -> "Campaign Rejected by Margin Guardrail";
+            case "REJECTED_BUDGET_DEPLETED" -> "Campaign Rejected by Budget Cap";
+            case "WEBHOOK_SETTLED" -> "Payment Received via Razorpay";
+            case "FAILED_RETRYABLE" -> "Gateway Exception (Retryable)";
+            default -> gateVerdict.replace("_", " ");
+        };
+    }
+
+    public String getFormattedCreatedAt() {
+        if (createdAt == null) return "Just now";
+        java.time.ZonedDateTime zdt = createdAt.atZone(java.time.ZoneId.of("Asia/Kolkata"));
+        return java.time.format.DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss").format(zdt);
+    }
+
+    public String getFormattedShortCreatedAt() {
+        if (createdAt == null) return "Just now";
+        java.time.ZonedDateTime zdt = createdAt.atZone(java.time.ZoneId.of("Asia/Kolkata"));
+        return java.time.format.DateTimeFormatter.ofPattern("dd MMM HH:mm").format(zdt);
+    }
+
+    public String getFormattedDate() {
+        if (createdAt == null) return "Just now";
+        java.time.ZonedDateTime zdt = createdAt.atZone(java.time.ZoneId.of("Asia/Kolkata"));
+        return java.time.format.DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm").format(zdt);
+    }
+
     public static final class Builder {
         private UUID campaignId;
         private String sku;

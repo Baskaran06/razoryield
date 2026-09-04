@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard — RazorYield Merchant Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/app.css}"/>
+</head>
+<body>
+
+<div class="app-shell">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div>
+                <div class="brand-title">RazorYield</div>
+                <div class="brand-subtitle">Flash Sale Orchestrator</div>
+            </div>
+        </div>
+
+        <ul class="nav-list">
+            <li>
+                <a th:href="@{/}" class="nav-link" th:classappend="${activeTab == 'dashboard' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                        Dashboard
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/campaigns}" class="nav-link" th:classappend="${activeTab == 'campaigns' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                        Campaigns
+                    </span>
+                    <span class="nav-badge" th:if="${pendingCount > 0}" th:text="${pendingCount}">0</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/inventory}" class="nav-link" th:classappend="${activeTab == 'inventory' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Inventory
+                    </span>
+                    <span class="nav-badge" th:if="${stagnantCount > 0}" th:text="${stagnantCount}" style="background-color: var(--color-amber-currency);">0</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/payments}" class="nav-link" th:classappend="${activeTab == 'payments' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        Payments
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/activity}" class="nav-link" th:classappend="${activeTab == 'activity' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Activity audit
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/settings}" class="nav-link" th:classappend="${activeTab == 'settings' ? 'active' : ''}">
+                    <span class="nav-link-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Settings &amp; key
+                    </span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div>Razorpay integration mode</div>
+            <div style="color:var(--color-emerald-profit); font-weight:600; margin-top:0.2rem;">Test mode (Safe simulation)</div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div>
+                <h1 class="page-title">Merchant overview</h1>
+            </div>
+            <div class="topbar-actions">
+                <div class="status-pill">
+                    <span class="dot-green"></span>
+                    <span>Mode: <strong th:text="${proposerLabel.contains('HEURISTIC') ? 'AI Pricing Strategist (Rule-assisted mode)' : 'AI Pricing Strategist (Spring AI)'}">AI Pricing Strategist</strong></span>
+                </div>
+                <button id="runBtn" class="btn btn-emerald" type="button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    Scan inventory &amp; run cycle
+                </button>
+            </div>
+        </header>
+
+        <!-- Body Container -->
+        <div class="page-body">
+            <div id="banner" class="banner banner-info" hidden></div>
+
+            <!-- Asymmetric Hero Metrics Grid -->
+            <div class="hero-metrics-grid">
+                <!-- Featured Hero Card: Recovered Revenue -->
+                <div class="stat-card-featured">
+                    <div>
+                        <div class="stat-label">Recovered revenue</div>
+                        <div class="stat-value number-font" th:text="'₹' + ${#numbers.formatDecimal(recoveredRevenuePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</div>
+                    </div>
+                    <div class="stat-subtext">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        Unlocked from idle inventory
+                    </div>
+                </div>
+
+                <!-- Standard Card: Units Moved -->
+                <div class="stat-card-standard">
+                    <div>
+                        <div class="stat-label">Units moved</div>
+                        <div class="stat-value number-font" th:text="${unitsMoved}">0</div>
+                    </div>
+                    <div class="stat-subtext">Sold via targeted offers</div>
+                </div>
+
+                <!-- Standard Card: Daily Campaign Budget -->
+                <div class="stat-card-standard">
+                    <div>
+                        <div class="stat-label">Daily discount budget</div>
+                        <div class="stat-value number-font" style="font-size:1.25rem;">
+                            <span th:text="'₹' + ${#numbers.formatDecimal(consumedPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹0</span>
+                            <span style="font-size:0.8rem; font-weight:400; color:var(--color-text-muted);" th:text="'/ ₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">/ ₹20,000</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="budget-bar-track">
+                            <div class="budget-bar-fill" th:style="'width:' + ${budgetPct} + '%'"></div>
+                        </div>
+                        <div class="stat-subtext" style="margin-top:0.35rem;">Guaranteed limit protection</div>
+                    </div>
+                </div>
+
+                <!-- Standard Card: Awaiting Merchant Review -->
+                <div class="stat-card-standard">
+                    <div>
+                        <div class="stat-label">Awaiting approval</div>
+                        <div class="stat-value number-font" th:text="${pendingCount}">0</div>
+                    </div>
+                    <div class="stat-subtext">Higher-value discounts in review</div>
+                </div>
+            </div>
+
+            <!-- Campaigns Requiring Merchant Review -->
+            <div class="section-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Needs your attention</h2>
+                        <div class="panel-subtitle">Campaign proposals exceeding automatic dispatch thresholds require merchant sign-off before payment link creation.</div>
+                    </div>
+                    <a th:href="@{/campaigns}" class="btn btn-outline btn-sm">View all campaigns</a>
+                </div>
+
+                <!-- Empty State (No mood emoji, clear merchant guidance) -->
+                <div class="empty-box" th:if="${pending.isEmpty()}">
+                    <div class="empty-icon-wrap">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="empty-headline">All caught up</div>
+                    <div class="empty-subtext">No campaigns currently require approval. Click "Scan inventory &amp; run cycle" to discover new flash-sale opportunities from stagnant stock.</div>
+                </div>
+
+                <div class="campaign-grid" th:unless="${pending.isEmpty()}">
+                    <div class="campaign-card" th:each="c : ${pending}">
+                        <div class="campaign-card-top">
+                            <div>
+                                <div class="prod-title" th:text="${c.displayName}">Product Name</div>
+                                <div class="prod-sku number-font" th:text="'SKU: ' + ${c.sku}">SKU</div>
+                            </div>
+                            <div class="offer-display">
+                                <div class="price-offer number-font" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0</div>
+                                <span class="disc-pill" th:text="${c.discountPct} + '% off'">0% off</span>
+                            </div>
+                        </div>
+
+                        <div style="font-size:0.8rem; color:var(--color-amber-currency); background:var(--color-amber-bg); padding:0.6rem 0.8rem; border-radius:var(--radius-sm); border:1px solid var(--color-amber-border); display:flex; align-items:center; gap:0.4rem;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            Requires human sign-off: Discount exceeds automated limit.
+                        </div>
+
+                        <button class="btn btn-emerald btn-sm approve-trigger" type="button" th:attr="data-id=${c.id}, data-name=${c.displayName}, data-offer=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-disc=${c.discountPct}">
+                            Review &amp; approve campaign
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Layout for Stagnant Catalog & Activity -->
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                <!-- Stagnant Catalog Panel -->
+                <div class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Stagnant stock opportunities</h2>
+                        <a th:href="@{/inventory}" class="btn btn-outline btn-sm">Full catalog</a>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="num">Stock</th>
+                                <th class="num">Days unsold</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="p : ${products}" th:if="${p.daysIdle >= 45}">
+                                <td>
+                                    <div style="font-weight:600;" th:text="${p.displayName}">Product Name</div>
+                                    <div class="prod-sku number-font" th:text="${p.sku}">SKU</div>
+                                </td>
+                                <td class="num number-font" th:text="${p.stockQty}">0</td>
+                                <td class="num number-font" th:text="${p.daysIdle} + 'd'">0d</td>
+                                <td>
+                                    <span class="badge badge-amber" th:if="${p.daysIdle >= 90}">Critical stagnation</span>
+                                    <span class="badge badge-slate" th:if="${p.daysIdle >= 45 && p.daysIdle < 90}">Needs attention</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Panel -->
+                <div class="section-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Recent decision history</h2>
+                        <a th:href="@{/activity}" class="btn btn-outline btn-sm">Full audit trail</a>
+                    </div>
+                    <div style="padding:1.5rem;">
+                        <ul class="timeline-list">
+                            <li class="timeline-node" th:each="a, iterStat : ${auditEntries}" th:if="${iterStat.index < 5}">
+                                <div class="timeline-node-time number-font" th:text="${a.formattedShortCreatedAt}">Timestamp</div>
+                                <div class="timeline-node-title" th:text="${a.humanVerdict}">Event Verdict</div>
+                                <div class="timeline-node-desc">
+                                    <span th:text="${a.displayName}">Product</span> —
+                                    <span class="number-font" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal for Campaign Review -->
+<div id="approvalModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 class="panel-title" id="modalProductName">Review campaign</h3>
+            <button id="modalCloseBtn" style="background:none; border:none; font-size:1.25rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="background:var(--color-bg-canvas); padding:1rem; border-radius:var(--radius-md); margin-bottom:1.25rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:0.75rem; color:var(--color-text-muted);">Recommended offer price</div>
+                        <div id="modalOfferPrice" class="number-font" style="font-size:1.5rem; font-weight:700; color:var(--color-emerald-profit);">₹0.00</div>
+                    </div>
+                    <div id="modalDiscountBadge" class="disc-pill" style="font-size:0.9rem; padding:0.3rem 0.75rem;">0% off</div>
+                </div>
+            </div>
+
+            <h4 style="font-size:0.875rem; font-weight:700; margin-bottom:0.5rem;">Financial safety assessment</h4>
+            <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.25rem;">
+                <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;">
+                    <span style="color:var(--color-emerald-profit);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    Minimum 15.00% gross margin requirement satisfied
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;">
+                    <span style="color:var(--color-emerald-profit);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    Daily campaign budget limit guaranteed
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem;">
+                    <span style="color:var(--color-amber-currency);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </span>
+                    Discounts above 10.00% ceiling require merchant authorization
+                </div>
+            </div>
+
+            <div style="margin-bottom:1rem;">
+                <label for="merchantKeyInput" style="display:block; font-weight:600; font-size:0.8rem; margin-bottom:0.35rem;">Merchant authentication key</label>
+                <input id="merchantKeyInput" type="password" class="btn btn-outline" style="width:100%; text-align:left;" placeholder="Enter merchant key"/>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="modalCancelBtn" class="btn btn-outline">Cancel</button>
+            <button id="modalApproveConfirmBtn" class="btn btn-emerald">Approve &amp; create payment link</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const banner = document.getElementById('banner');
+    const runBtn = document.getElementById('runBtn');
+    const modal = document.getElementById('approvalModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalCancelBtn = document.getElementById('modalCancelBtn');
+    const modalApproveConfirmBtn = document.getElementById('modalApproveConfirmBtn');
+    const keyInput = document.getElementById('merchantKeyInput');
+    
+    let activeCampaignId = null;
+
+    keyInput.value = sessionStorage.getItem('ry_key') || 'mk_local_dev_key';
+    keyInput.addEventListener('input', () => sessionStorage.setItem('ry_key', keyInput.value));
+
+    function showBanner(type, text) {
+        banner.hidden = false;
+        banner.className = 'banner banner-' + type;
+        banner.textContent = text;
+    }
+
+    runBtn.addEventListener('click', async () => {
+        runBtn.disabled = true;
+        showBanner('info', 'Scanning idle stock and consulting AI pricing strategist...');
+        try {
+            const res = await fetch('/api/v1/campaigns/orchestrate', { method: 'POST' });
+            const data = await res.json();
+            const auto = data.outcomes.filter(o => o.status === 'AUTO_DISPATCHED').length;
+            const human = data.outcomes.filter(o => o.status === 'PENDING_MERCHANT_APPROVAL').length;
+            const blocked = data.outcomes.filter(o => o.status === 'REJECTED_MARGIN_BREACH').length;
+            showBanner('success', `Opportunity scan complete: ${data.productsScanned} products evaluated. ${auto} automatically launched, ${human} awaiting merchant sign-off, ${blocked} protected by margin floor.`);
+            setTimeout(() => location.reload(), 1200);
+        } catch (e) {
+            showBanner('danger', 'Scan cycle failed: ' + e.message);
+            runBtn.disabled = false;
+        }
+    });
+
+    document.querySelectorAll('.approve-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+            activeCampaignId = btn.getAttribute('data-id');
+            document.getElementById('modalProductName').textContent = btn.getAttribute('data-name');
+            document.getElementById('modalOfferPrice').textContent = '₹' + btn.getAttribute('data-offer');
+            document.getElementById('modalDiscountBadge').textContent = btn.getAttribute('data-disc') + '% off';
+            modal.classList.add('active');
+        });
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+        activeCampaignId = null;
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalCancelBtn.addEventListener('click', closeModal);
+
+    modalApproveConfirmBtn.addEventListener('click', async () => {
+        const key = keyInput.value.trim();
+        if (!key) {
+            alert('Please enter your merchant authentication key.');
+            keyInput.focus();
+            return;
+        }
+        modalApproveConfirmBtn.disabled = true;
+        try {
+            const res = await fetch(`/api/v1/campaigns/${activeCampaignId}/approve`, {
+                method: 'POST',
+                headers: { 'X-Merchant-Key': key }
+            });
+            const data = await res.json();
+            if (res.ok) {
+                closeModal();
+                showBanner('success', `Campaign authorized! Razorpay payment link ${data.razorpayLinkId} created successfully.`);
+                setTimeout(() => location.reload(), 1200);
+            } else {
+                alert(`Error: ${data.message || 'Authorization refused'}`);
+                modalApproveConfirmBtn.disabled = false;
+            }
+        } catch (e) {
+            alert('Request failed: ' + e.message);
+            modalApproveConfirmBtn.disabled = false;
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

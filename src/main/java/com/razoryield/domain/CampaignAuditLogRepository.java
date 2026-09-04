@@ -9,5 +9,7 @@ public interface CampaignAuditLogRepository extends JpaRepository<CampaignAuditL
 
     List<CampaignAuditLog> findByCampaignIdOrderByCreatedAtAsc(UUID campaignId);
 
+    List<CampaignAuditLog> findBySettlementStatusOrderByCreatedAtDesc(String settlementStatus);
+
     boolean existsByRazorpayPaymentId(String razorpayPaymentId);
 }

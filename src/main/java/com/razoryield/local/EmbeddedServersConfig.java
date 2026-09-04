@@ -14,6 +14,7 @@ import redis.embedded.RedisServer;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.net.ServerSocket;
 
 /**
  * Runs PostgreSQL and Redis in-process so the app starts on a machine with neither installed and no
@@ -29,7 +30,6 @@ import java.io.IOException;
 public class EmbeddedServersConfig {
 
     private static final Logger log = LoggerFactory.getLogger(EmbeddedServersConfig.class);
-    private static final int REDIS_PORT = 16379;
 
     private EmbeddedPostgres postgres;
     private RedisServer redisServer;
@@ -45,13 +45,24 @@ public class EmbeddedServersConfig {
     @Bean
     @Primary
     public LettuceConnectionFactory embeddedRedisConnectionFactory() throws IOException {
+        // A redis-server child process outlives a force-killed JVM and keeps its port bound, so a
+        // fixed port makes the next run fail to start. Claim a free one instead.
+        int port = findFreePort();
         redisServer = RedisServer.newRedisServer()
-                .port(REDIS_PORT)
+                .port(port)
                 .setting("maxmemory 64M")
+                .onShutdownForceStop(true)
                 .build();
         redisServer.start();
-        log.info("Embedded Redis listening on port {}", REDIS_PORT);
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", REDIS_PORT));
+        log.info("Embedded Redis listening on port {}", port);
+        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", port));
+    }
+
+    private static int findFreePort() throws IOException {
+        try (ServerSocket socket = new ServerSocket(0)) {
+            socket.setReuseAddress(true);
+            return socket.getLocalPort();
+        }
     }
 
     @PreDestroy

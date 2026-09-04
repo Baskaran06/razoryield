@@ -1,150 +1,161 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Campaigns — RazorYield Merchant Console</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/app.css}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RazorYield — Campaign Orchestrator</title>
+    <link rel="stylesheet" th:href="@{/app.css}">
 </head>
 <body>
 
-<div class="app-shell">
-    <aside class="sidebar">
-        <div class="sidebar-header">
+<div class="app-container">
+    <!-- Top Glass Navigation Bar -->
+    <header class="navbar-glass">
+        <div class="brand-wrapper">
             <div class="brand-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    <polyline points="17 6 23 6 23 12"/>
+                </svg>
             </div>
             <div>
                 <div class="brand-title">RazorYield</div>
-                <div class="brand-subtitle">Flash Sale Orchestrator</div>
+                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale Orchestrator</div>
             </div>
         </div>
 
-        <ul class="nav-list">
-            <li>
-                <a th:href="@{/}" class="nav-link">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-                        Dashboard
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/campaigns}" class="nav-link active">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                        Campaigns
-                    </span>
-                    <span class="nav-badge" th:if="${pendingCount > 0}" th:text="${pendingCount}">0</span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/inventory}" class="nav-link">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                        Inventory
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/payments}" class="nav-link">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                        Payments
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/activity}" class="nav-link">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        Activity audit
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/settings}" class="nav-link">
-                    <span class="nav-link-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                        Settings &amp; key
-                    </span>
-                </a>
-            </li>
+        <ul class="nav-links">
+            <li><a th:href="@{/}" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a></li>
+            <li><a th:href="@{/campaigns}" class="nav-link active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                Campaigns
+            </a></li>
+            <li><a th:href="@{/inventory}" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Inventory
+            </a></li>
+            <li><a th:href="@{/payments}" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Payouts
+            </a></li>
+            <li><a th:href="@{/activity}" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Audit Trail
+            </a></li>
+            <li><a th:href="@{/settings}" class="nav-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Settings
+            </a></li>
         </ul>
-    </aside>
 
-    <main class="main-content">
-        <header class="topbar">
-            <h1 class="page-title">Campaign management</h1>
-            <div class="topbar-actions">
-                <a th:href="@{/}" class="btn btn-outline">← Back to Dashboard</a>
+        <div class="header-status-pill">
+            <span class="pulse-dot"></span>
+            <span>Razorpay Active</span>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Flash Sale Campaign Workspace</h1>
+                <p class="page-subtitle">Track active promotional campaigns, discount parameters, and Razorpay checkout links</p>
             </div>
-        </header>
+        </div>
 
-        <div class="page-body">
-            <div class="section-panel">
-                <div class="panel-header">
-                    <div>
-                        <h2 class="panel-title">Flash-sale campaigns</h2>
-                        <div class="panel-subtitle">Every automated offer, merchant approval decision, and Razorpay payment link.</div>
-                    </div>
+        <div class="card-glass">
+            <div class="card-header">
+                <div class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    <span>All Orchestrated Campaigns</span>
+                </div>
+                <span class="badge badge-indigo" th:text="${campaigns.size()} + ' Total'">0 Total</span>
+            </div>
+
+            <div class="table-wrapper">
+                <div th:if="${campaigns.isEmpty()}" class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    <div style="font-weight:600; color:var(--text-title);">No campaigns launched yet</div>
+                    <p style="font-size:0.85rem; margin-top:0.35rem;">Go to the dashboard to initiate a stock opportunity scan.</p>
                 </div>
 
-                <div class="empty-box" th:if="${campaigns.isEmpty()}">
-                    <div class="empty-icon-wrap">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    </div>
-                    <div class="empty-headline">No campaigns launched yet</div>
-                    <div class="empty-subtext">Return to the Dashboard and click "Scan inventory &amp; run cycle" to discover stagnant stock and generate recommendations.</div>
-                </div>
-
-                <div class="table-wrapper" th:unless="${campaigns.isEmpty()}">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th class="num">Offer price</th>
-                            <th class="num">Discount</th>
-                            <th>Status &amp; authorization</th>
-                            <th>Razorpay link reference</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="c : ${campaigns}">
-                            <td>
-                                <div style="font-weight:700;" th:text="${c.displayName}">Product Name</div>
-                                <div class="prod-sku number-font" th:text="'SKU: ' + ${c.sku}">SKU</div>
-                            </td>
-                            <td class="num number-font" style="font-weight:700; color:var(--color-emerald-profit);" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0</td>
-                            <td class="num number-font" th:text="${c.discountPct} + '%'">0%</td>
-                            <td>
-                                <span class="badge badge-amber" th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}">Merchant approval required</span>
-                                <span class="badge badge-green" th:if="${c.status.name() == 'AUTO_DISPATCHED'}">Automatically launched</span>
-                                <span class="badge badge-green" th:if="${c.status.name() == 'APPROVED'}">Payment link active</span>
-                                <span class="badge badge-red" th:if="${c.status.name() == 'REJECTED_MARGIN_BREACH'}">Rejected (Margin floor limit)</span>
-                            </td>
-                            <td class="number-font" style="font-size:0.8rem;">
-                                <span th:if="${c.razorpayLinkId != null}" th:text="${c.razorpayLinkId}">plink_xxx</span>
-                                <span th:if="${c.razorpayLinkId == null}" style="color:var(--color-text-muted);">—</span>
-                            </td>
-                            <td>
-                                <button th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" class="btn btn-emerald btn-sm approve-trigger" type="button" th:attr="data-id=${c.id}, data-name=${c.displayName}, data-offer=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-disc=${c.discountPct}">
-                                    Authorize
+                <table th:unless="${campaigns.isEmpty()}" class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Product &amp; SKU</th>
+                        <th>Campaign Status</th>
+                        <th class="num">Discount</th>
+                        <th class="num">Offer Price</th>
+                        <th>Razorpay Checkout Link</th>
+                        <th class="num">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="c : ${campaigns}">
+                        <td>
+                            <div style="font-weight:600; color:var(--text-title);" th:text="${c.displayName}">Product Name</div>
+                            <div class="number-font" style="font-size:0.78rem; color:var(--text-muted);" th:text="${c.sku}">SKU-001</div>
+                        </td>
+                        <td>
+                            <span th:if="${c.status.name() == 'APPROVED'}" class="badge badge-emerald">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                Active &amp; Selling
+                            </span>
+                            <span th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" class="badge badge-amber">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                Approval Required
+                            </span>
+                            <span th:if="${c.status.name() == 'PROPOSED'}" class="badge badge-indigo">
+                                Recommendation Ready
+                            </span>
+                            <span th:if="${c.status.name() == 'REJECTED_MARGIN_BREACH'}" class="badge badge-rose">
+                                Rejected (Margin Breach)
+                            </span>
+                        </td>
+                        <td class="num number-font" th:text="${c.discountPct} + '%'">0%</td>
+                        <td class="num number-font text-emerald" style="font-weight:700;" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</td>
+                        <td>
+                            <div th:if="${c.razorpayLinkId != null}" style="display:flex; align-items:center; gap:0.5rem;">
+                                <span class="number-font" style="font-size:0.8rem; color:var(--text-body);" th:text="${c.razorpayLinkId}">plink_xxx</span>
+                                <button type="button" class="btn btn-outline btn-sm copy-btn" style="padding:0.2rem 0.5rem; font-size:0.75rem;" th:attr="data-link=${c.razorpayLinkId}">
+                                    Copy Link
                                 </button>
-                                <span th:unless="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" style="font-size:0.8rem; color:var(--color-text-muted);">Resolved</span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                            </div>
+                            <span th:if="${c.razorpayLinkId == null}" style="color:var(--text-subtle); font-size:0.8rem;">Not generated yet</span>
+                        </td>
+                        <td class="num">
+                            <a th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" th:href="@{/}" class="btn btn-emerald btn-sm">
+                                Review &amp; Approve
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 </div>
+
+<!-- Floating Toast -->
+<div class="toast-notification" id="toast">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <span id="toastMsg">Link copied to clipboard!</span>
+</div>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const link = 'https://rzp.io/i/' + btn.getAttribute('data-link');
+        navigator.clipboard.writeText(link);
+        const toast = document.getElementById('toast');
+        toast.classList.add('active');
+        setTimeout(() => toast.classList.remove('active'), 3000);
+    });
+});
+</script>
 
 </body>
 </html>

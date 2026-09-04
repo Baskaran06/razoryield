@@ -60,7 +60,21 @@ unique constraint; a duplicate webhook delivery loses the insert race, raises
 `DataIntegrityViolationException`, and is acknowledged with `200 OK` without applying the side
 effect twice. A read-then-write check would let two concurrent deliveries both pass.
 
-## Running it
+## Running it locally, with nothing installed
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+That is the whole setup. No PostgreSQL, no Redis, no Docker. Under the `local` profile,
+[`EmbeddedServersConfig`](src/main/java/com/razoryield/local/EmbeddedServersConfig.java) starts a
+**real PostgreSQL** and a **real Redis** as child processes — their binaries ship inside Maven
+artifacts — and stops them when the app exits. Flyway migrates the embedded database on the way up.
+
+They are the genuine servers, not stand-ins, so the CHECK constraint, the unique constraint on
+`razorpay_payment_id` and the atomic `INCRBY` all behave exactly as they will in production.
+
+## Running it against real servers
 
 Requires **Java 21**, **Maven**, **PostgreSQL**, and **Redis**.
 

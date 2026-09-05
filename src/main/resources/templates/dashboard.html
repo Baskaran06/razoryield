@@ -85,21 +85,17 @@
         <!-- Page Action Header -->
         <div class="page-header">
             <div>
-                <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.35rem;">
-                    <span class="badge badge-indigo">Merchant Terminal</span>
-                    <span style="font-size:0.8rem; color:var(--text-muted); font-family:var(--font-mono);">ID: MID_RAZORYIELD_01</span>
-                </div>
-                <h1 class="page-title">Clearance Command Center</h1>
-                <p class="page-subtitle">Real-time inventory clearance orchestrator &amp; automated margin floor defense engine</p>
+                <h1 class="page-title">Smart Inventory Clearance</h1>
+                <p class="page-subtitle">Turn slow-moving stock into cash while guaranteeing your profit margins.</p>
             </div>
             
             <div style="display:flex; align-items:center; gap:0.75rem;">
-                <form th:action="@{/api/v1/orchestrate}" method="post" id="orchestrateForm">
+                <form th:action="@{/orchestrate}" method="post" id="orchestrateForm">
                     <button type="submit" class="btn btn-emerald" id="scanBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                         </svg>
-                        <span>Run Stock Opportunity Scan</span>
+                        <span>Scan Inventory</span>
                     </button>
                 </form>
             </div>
@@ -107,150 +103,117 @@
 
         <!-- Notification Banner -->
         <div id="alertContainer">
-            <div th:if="${param.orchestrated}" class="badge badge-emerald" style="width:100%; padding:0.95rem 1.4rem; font-size:0.9rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Autonomous Scan Complete! Spring AI analyzed idle inventory velocity and generated dynamic margin-compliant clearance proposals.
+            <div th:if="${param.orchestrated}" class="badge badge-emerald" style="width:100%; padding:0.85rem 1.25rem; font-size:0.88rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Scan complete! New clearance proposals are ready below for your review.
             </div>
         </div>
 
-        <!-- How RazorYield Works: 3-Step Clear Explainer Process -->
+        <!-- Simple 3-Step Process -->
         <div class="process-pipeline-banner">
             <div class="process-banner-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                </svg>
-                <span>How RazorYield Works — 3-Step Automated Clearance Engine</span>
-                <span class="badge badge-emerald" style="margin-left:auto; font-size:0.72rem;">Zero Manual Hassle</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>How It Works — Simple 3-Step Clearance</span>
             </div>
             <div class="process-steps-grid">
                 <div class="process-step-card">
-                    <div class="process-step-num">
-                        <span class="badge badge-emerald" style="padding:0.15rem 0.45rem;">Step 1</span>
-                        <span>Stagnation Scan</span>
-                    </div>
-                    <div class="process-step-name">Detect Idle Inventory</div>
-                    <div class="process-step-desc">Identifies slow-moving products sitting idle 30+ days that trap valuable merchant working capital.</div>
+                    <div class="process-step-num">Step 1</div>
+                    <div class="process-step-name">Find Slow Stock</div>
+                    <div class="process-step-desc">Flags items unsold for 30+ days tying up your money.</div>
                 </div>
                 <div class="process-step-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
                 <div class="process-step-card">
-                    <div class="process-step-num">
-                        <span class="badge badge-indigo" style="padding:0.15rem 0.45rem;">Step 2</span>
-                        <span>AI Pricing + 15% Floor</span>
-                    </div>
-                    <div class="process-step-name">Safe Dynamic Discount</div>
-                    <div class="process-step-desc">Spring AI calculates optimal clearance discount while mathematically locking the 15% profit floor.</div>
+                    <div class="process-step-num">Step 2</div>
+                    <div class="process-step-name">Smart Pricing</div>
+                    <div class="process-step-desc">Suggests safe discounts that keep at least 15% profit.</div>
                 </div>
                 <div class="process-step-arrow">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
                 <div class="process-step-card">
-                    <div class="process-step-num">
-                        <span class="badge badge-amber" style="padding:0.15rem 0.45rem;">Step 3</span>
-                        <span>Razorpay Settlement</span>
-                    </div>
-                    <div class="process-step-name">1-Click Payouts</div>
-                    <div class="process-step-desc">Authorize with 1 click; instant Razorpay payment links liquidate stock with HMAC verified settlements.</div>
+                    <div class="process-step-num">Step 3</div>
+                    <div class="process-step-name">1-Click Payout</div>
+                    <div class="process-step-desc">Approve to get a Razorpay link and receive money directly.</div>
                 </div>
             </div>
         </div>
 
-        <!-- Hero Performance Stat Grid -->
-        <div class="hero-grid">
-            <div class="card-glass stat-card stat-card-emerald">
+        <!-- Core Metric Cards -->
+        <div class="hero-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="stat-card stat-card-emerald">
                 <div class="stat-label">
-                    <span>Recovered Capital</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    <span>Cash Recovered</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                 </div>
                 <div class="stat-value number-font text-emerald" th:text="'₹' + ${#numbers.formatDecimal(recoveredRevenuePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</div>
-                <div class="stat-footer">
-                    <span class="badge badge-emerald" style="padding:0.15rem 0.45rem; font-size:0.7rem;">Razorpay Captured</span>
-                    <span>Direct merchant settlement</span>
-                </div>
+                <div class="stat-footer"><span>Settled to your bank</span></div>
             </div>
 
-            <div class="card-glass stat-card">
+            <div class="stat-card">
                 <div class="stat-label">
-                    <span>Cleared Inventory</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                    <span>Units Sold</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 </div>
                 <div class="stat-value number-font" th:text="${unitsMoved}">0</div>
-                <div class="stat-footer">
-                    <span>Units liquidated from deadstock</span>
-                </div>
+                <div class="stat-footer"><span>Moved out of storage</span></div>
             </div>
 
-            <div class="card-glass stat-card stat-card-indigo">
+            <div class="stat-card stat-card-indigo">
                 <div class="stat-label">
-                    <span>Pending AI Action</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <span>Ready for Review</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
                 <div class="stat-value number-font text-indigo" th:text="${pendingCount}">0</div>
-                <div class="stat-footer">
-                    <span class="text-indigo" style="font-weight:600;">Requires merchant authorization</span>
-                </div>
+                <div class="stat-footer"><span>Waiting for your approval</span></div>
             </div>
 
-            <div class="card-glass stat-card stat-card-amber">
+            <div class="stat-card stat-card-amber">
                 <div class="stat-label">
-                    <span>Daily Clearance Budget</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <span>Daily Discount Cap</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
                 <div class="stat-value number-font" style="font-size:1.45rem;" th:text="'₹' + ${#numbers.formatDecimal(consumedPaise / 100.0, 1, 'COMMA', 0, 'POINT')} + ' / ₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹0 / ₹20,000</div>
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" th:style="'width:' + ${dailyCapPaise > 0 ? (consumedPaise * 100.0 / dailyCapPaise) : 0} + '%'"></div>
                 </div>
-                <div class="stat-footer">
-                    <span>Atomic Redis reserve safety active</span>
-                </div>
+                <div class="stat-footer"><span>Prevents over-discounting</span></div>
             </div>
         </div>
 
-        <!-- 3-TIER POLICY GUARDRAILS HUD (JUDGES SPOTLIGHT) -->
+        <!-- Built-in Safety Protections -->
         <div class="guardrails-hud">
-            <div class="card-glass gate-card">
-                <div class="gate-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--color-emerald); border:1px solid rgba(16, 185, 129, 0.3);">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="gate-card">
+                <div class="gate-icon" style="background:#ecfdf5; color:var(--color-emerald); border:1px solid #a7f3d0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
                 <div>
-                    <div class="gate-title">
-                        <span>Gate 1: Margin Floor Defense</span>
-                    </div>
-                    <div class="gate-desc">Deterministic enforcement: Offer price cannot breach Cost × 1.15. Zero floating-point drift.</div>
-                    <span class="gate-status-pill badge-emerald">
-                        <span class="pulse-dot"></span> Active Enforced
-                    </span>
+                    <div class="gate-title">15% Profit Protection</div>
+                    <div class="gate-desc">Prices are locked at least 15% above your cost. You never take a loss.</div>
+                    <span class="gate-status-pill badge-emerald"><span class="pulse-dot"></span> Protected</span>
                 </div>
             </div>
 
-            <div class="card-glass gate-card">
-                <div class="gate-icon" style="background:rgba(99, 102, 241, 0.15); color:var(--color-indigo); border:1px solid rgba(99, 102, 241, 0.3);">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div class="gate-card">
+                <div class="gate-icon" style="background:#eef2ff; color:var(--color-indigo); border:1px solid #c7d2fe;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
                 <div>
-                    <div class="gate-title">
-                        <span>Gate 2: Atomic Budget Cap</span>
-                    </div>
-                    <div class="gate-desc">Distributed Redis INCRBY reservation blocks discount leakage over ₹20,000/day.</div>
-                    <span class="gate-status-pill badge-indigo">
-                        <span class="pulse-dot" style="background:var(--color-indigo); box-shadow:0 0 10px var(--color-indigo);"></span> Atomic Quota Safe
-                    </span>
+                    <div class="gate-title">₹20,000 Daily Limit</div>
+                    <div class="gate-desc">Caps total daily discounts so sales never hurt your overall revenue.</div>
+                    <span class="gate-status-pill badge-indigo"><span class="pulse-dot" style="background:var(--color-indigo);"></span> Active</span>
                 </div>
             </div>
 
-            <div class="card-glass gate-card">
-                <div class="gate-icon" style="background:rgba(245, 158, 11, 0.15); color:var(--color-amber); border:1px solid rgba(245, 158, 11, 0.3);">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="gate-card">
+                <div class="gate-icon" style="background:#fffbeb; color:var(--color-amber); border:1px solid #fde68a;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 </div>
                 <div>
-                    <div class="gate-title">
-                        <span>Gate 3: HITL Merchant Gating</span>
-                    </div>
-                    <div class="gate-desc">Proposals exceeding 10% or ₹500 discount require cryptographic merchant key approval.</div>
-                    <span class="gate-status-pill badge-amber">
-                        <span class="pulse-dot" style="background:var(--color-amber); box-shadow:0 0 10px var(--color-amber);"></span> Gated Policy Active
-                    </span>
+                    <div class="gate-title">You Have Final Say</div>
+                    <div class="gate-desc">Discounts only launch when you review and click Approve.</div>
+                    <span class="gate-status-pill badge-amber"><span class="pulse-dot" style="background:var(--color-amber);"></span> Safe</span>
                 </div>
             </div>
         </div>
@@ -330,84 +293,77 @@
         <!-- Main Content Sections Grid -->
         <div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.75rem;">
             
-            <!-- AI Clearance Proposals Radar -->
+            <!-- Items Ready for Flash Sale -->
             <div class="card-glass">
                 <div class="card-header">
                     <div class="card-title">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                        <span>Campaign Clearance Recommendations (Autonomous Radar)</span>
+                        <span>Items Ready for Clearance</span>
                     </div>
-                    <span class="badge badge-emerald" th:text="${pending.size()} + ' Actionable'">0 Actionable</span>
+                    <span class="badge badge-emerald" th:text="${pending.size()} + ' Ready'">0 Ready</span>
                 </div>
 
                 <div class="card-body">
                     <div th:if="${pending.isEmpty()}" class="empty-state" style="text-align:center; padding:3rem 1.5rem;">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <div style="font-weight:700; color:var(--text-title); font-size:1.1rem;">No Pending Clearance Recommendations</div>
+                        <div style="font-weight:700; color:var(--text-title); font-size:1.1rem;">All Inventory is Healthy</div>
                         <p style="font-size:0.9rem; margin-top:0.4rem; color:var(--text-muted); max-width:420px; margin-left:auto; margin-right:auto;">
-                            All inventory items are currently within safe turn velocity thresholds. Run an Opportunity Scan to analyze aging stock and synthesize dynamic pricing.
+                            No slow-moving items need attention right now. Click "Scan Inventory" anytime to check your catalog.
                         </p>
                     </div>
 
-                    <div th:unless="${pending.isEmpty()}" class="radar-grid">
+                    <div th:unless="${pending.isEmpty()}" class="proposals-grid">
                         <div class="proposal-card" th:each="c : ${pending}">
                             <div>
-                                <div class="proposal-header">
-                                    <div>
-                                        <div class="product-name" th:text="${c.displayName}">Product Name</div>
-                                        <div class="product-sku number-font" th:text="${c.sku}">SKU-001</div>
-                                    </div>
-                                    <span class="badge badge-amber" th:text="${c.discountPct} + '% OFF'">15% OFF</span>
-                                </div>
-
-                                <div class="price-comparison">
-                                    <div>
-                                        <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Recommended Offer</div>
-                                        <div class="price-offer number-font" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</div>
-                                    </div>
-                                </div>
-
-                                <div class="ai-reasoning-box">
-                                    <div style="font-weight:700; color:var(--text-title); margin-bottom:0.3rem; display:flex; align-items:center; gap:0.4rem;">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                                        <span>Explainable AI Pricing Model</span>
-                                    </div>
-                                    <div>Dynamic clearance computed via velocity curve. Guaranteed margin retention above cost base.</div>
-                                </div>
+                                <div class="proposal-title" th:text="${c.displayName}">Product Name</div>
+                                <div class="proposal-sku number-font" th:text="${c.sku}">SKU-001</div>
+                                <div class="proposal-reasoning">Calculated to sell fast while keeping a healthy 15%+ profit.</div>
                             </div>
 
-                            <button class="btn btn-emerald btn-sm approve-trigger" type="button" style="width:100%; margin-top:0.75rem;" 
-                                    th:attr="data-id=${c.id}, data-name=${c.displayName}, data-offer=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-disc=${c.discountPct}">
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                <span>Authorize &amp; Generate Razorpay Link</span>
-                            </button>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Discount</div>
+                                <span class="badge badge-amber" style="margin-top:0.25rem; font-size:0.85rem;" th:text="${c.discountPct} + '% OFF'">15% OFF</span>
+                            </div>
+
+                            <div style="text-align:right;">
+                                <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:600;">Sale Price</div>
+                                <div class="number-font text-emerald" style="font-size:1.25rem; font-weight:800; margin-top:0.15rem;" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</div>
+                            </div>
+
+                            <div>
+                                <button class="btn btn-emerald btn-sm approve-trigger" type="button"
+                                        th:attr="data-id=${c.id}, data-name=${c.displayName}, data-offer=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-disc=${c.discountPct}">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Approve &amp; Get Link</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Decision Log Feed -->
+            <!-- Recent Activity Feed -->
             <div class="card-glass">
                 <div class="card-header">
                     <div class="card-title">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        <span>Audit &amp; Telemetry Feed</span>
+                        <span>Recent Activity</span>
                     </div>
-                    <a th:href="@{/activity}" class="btn btn-outline btn-sm" style="font-size:0.75rem;">Full Logs</a>
+                    <a th:href="@{/activity}" class="btn btn-outline btn-sm" style="font-size:0.75rem;">View All</a>
                 </div>
 
                 <div class="card-body">
                     <div th:if="${auditEntries.isEmpty()}" class="empty-state" style="text-align:center; padding:2rem 1rem;">
-                        <div style="color:var(--text-muted);">No decision telemetry recorded yet.</div>
+                        <div style="color:var(--text-muted);">No activity recorded yet.</div>
                     </div>
 
                     <ul th:unless="${auditEntries.isEmpty()}" class="timeline-list">
-                        <li class="timeline-node" th:each="a, iterStat : ${auditEntries}" th:if="${iterStat.index < 6}">
+                        <li class="timeline-node" th:each="a, iterStat : ${auditEntries}" th:if="${iterStat.index < 5}">
                             <div class="timeline-node-time number-font" th:text="${a.formattedShortCreatedAt}">Timestamp</div>
-                            <div class="timeline-node-title" th:text="${a.humanVerdict}">Event Verdict</div>
-                            <div style="font-size:0.8rem; margin-top:0.25rem; color:var(--text-body);">
-                                <span th:text="${a.displayName}" style="font-weight:600;">Product</span> — 
-                                <span class="number-font text-emerald" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0</span>
+                            <div class="timeline-node-title" th:text="${a.humanVerdict}">Event</div>
+                            <div style="font-size:0.82rem; margin-top:0.2rem; color:var(--text-muted);">
+                                <span th:text="${a.displayName}" style="font-weight:600; color:var(--text-title);">Product</span> — 
+                                <span class="number-font text-emerald" style="font-weight:700;" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0</span>
                             </div>
                         </li>
                     </ul>
@@ -423,41 +379,41 @@
     <div class="slideover-drawer">
         <div class="drawer-header">
             <div>
-                <div style="font-size:1.15rem; font-weight:800; color:#ffffff;" id="modalProductName">Authorize Campaign</div>
-                <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Verify AI discount proposal &amp; margin floor compliance</div>
+                <div style="font-size:1.15rem; font-weight:800; color:var(--text-title);" id="modalProductName">Approve Flash Sale</div>
+                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:0.2rem;">Quick 1-click review before generating your payment link</div>
             </div>
             <button type="button" class="btn btn-outline btn-sm" id="modalCloseBtn" style="padding:0.35rem 0.65rem;">✕</button>
         </div>
 
         <div class="drawer-body">
-            <div class="card-glass" style="padding:1.4rem; margin-bottom:1.5rem; background:rgba(0,0,0,0.4);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-                    <span style="font-size:0.75rem; text-transform:uppercase; font-weight:600; color:var(--text-muted);">Calculated Offer Price</span>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.25rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                    <span style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Sale Price</span>
                     <span class="badge badge-emerald" id="modalDiscountBadge">0% OFF</span>
                 </div>
-                <div style="font-size:2.2rem; font-weight:800; color:var(--color-emerald);" class="number-font" id="modalOfferPrice">₹0.00</div>
+                <div style="font-size:2rem; font-weight:800; color:var(--color-emerald-dark);" class="number-font" id="modalOfferPrice">₹0.00</div>
             </div>
 
-            <div class="ai-reasoning-box" style="margin-bottom:1.5rem;">
-                <div style="font-weight:700; color:var(--text-title); margin-bottom:0.35rem; display:flex; align-items:center; gap:0.4rem;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>Guardrail Safe Verification</span>
+            <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:var(--radius-sm); padding:0.9rem 1rem; margin-bottom:1.25rem; font-size:0.82rem; color:#065f46; line-height:1.45;">
+                <div style="font-weight:700; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>15% Profit Floor Guaranteed</span>
                 </div>
-                <div>Automated profit floor verified. Offer price is bounded strictly at or above Cost × 1.15. Zero loss threshold breach.</div>
+                <div>This discounted price is verified to keep at least 15% profit above your product cost.</div>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="merchantKeyInput">Merchant Authentication Key</label>
+                <label class="form-label" for="merchantKeyInput">Merchant Security Key</label>
                 <input type="password" class="form-input" id="merchantKeyInput" value="mk_local_dev_key" placeholder="Enter key (e.g. mk_local_dev_key)">
-                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">Verified securely against merchant store credential vault.</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem;">Default local development key is pre-filled for convenience.</div>
             </div>
         </div>
 
         <div class="drawer-footer">
             <button type="button" class="btn btn-outline" id="modalCancelBtn" style="flex:1;">Cancel</button>
             <button type="button" class="btn btn-emerald" id="modalApproveConfirmBtn" style="flex:1.5;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Authorize &amp; Launch Link</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Confirm &amp; Get Link</span>
             </button>
         </div>
     </div>

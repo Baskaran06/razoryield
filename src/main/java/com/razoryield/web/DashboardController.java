@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Controller for the merchant-facing UI pages.
@@ -115,5 +116,11 @@ public class DashboardController {
     public String settings(Model model) {
         populateCommonAttributes(model, "settings");
         return "settings";
+    }
+
+    @PostMapping("/orchestrate")
+    public String runOrchestration() {
+        orchestrator.runCycle();
+        return "redirect:/?orchestrated=true";
     }
 }

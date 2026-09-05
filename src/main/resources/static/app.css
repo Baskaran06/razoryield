@@ -316,10 +316,10 @@ body::before {
    MAIN WRAPPER & PAGE HEADERS
    ========================================================================== */
 .main-wrapper {
-  max-width: 1360px;
+  max-width: 1140px;
   width: 100%;
   margin: 0 auto;
-  padding: 2.25rem 2rem 4rem;
+  padding: 2.25rem 1.5rem 4rem;
   flex: 1;
 }
 

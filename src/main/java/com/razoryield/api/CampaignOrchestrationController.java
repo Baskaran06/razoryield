@@ -33,7 +33,7 @@ public class CampaignOrchestrationController {
     }
 
     /** Scans stagnant stock, gets a discount proposed for each, and runs it through the policy gate. */
-    @PostMapping("/campaigns/orchestrate")
+    @PostMapping({"/campaigns/orchestrate", "/orchestrate"})
     public OrchestrationResult orchestrate() {
         return orchestrator.runCycle();
     }

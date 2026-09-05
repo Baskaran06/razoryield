@@ -40,10 +40,10 @@
     <main class="main-wrapper">
         <div class="page-header anim-reveal">
             <div>
-                <h1 class="page-title">Compliance Audit Trail</h1>
-                <p class="page-subtitle">Immutable append-only history of campaign approvals, AI pricing decisions, and policy guardrail checks</p>
+                <h1 class="page-title">Activity History</h1>
+                <p class="page-subtitle">A transparent timeline of every scan, pricing decision, and campaign approval.</p>
             </div>
-            <span class="badge badge-indigo" th:text="${auditEntries.size()} + ' Events Logged'" style="font-size:0.85rem; padding:0.5rem 0.85rem;">0 Events Logged</span>
+            <span class="badge badge-indigo" th:text="${auditEntries.size()} + ' Total Events'" style="font-size:0.85rem; padding:0.45rem 0.85rem;">0 Total Events</span>
         </div>
 
         <!-- Audit Filter Tabs -->
@@ -51,14 +51,14 @@
             <button class="filter-tab active" data-filter="all">All Events</button>
             <button class="filter-tab" data-filter="approved">Approved</button>
             <button class="filter-tab" data-filter="rejected">Rejected</button>
-            <button class="filter-tab" data-filter="guardrail">Guardrail Blocked</button>
+            <button class="filter-tab" data-filter="guardrail">Protected</button>
         </div>
 
         <div class="card-glass anim-reveal">
             <div class="card-header">
                 <div class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    <span>Permanent Event Ledger</span>
+                    <span>Timeline</span>
                 </div>
             </div>
 

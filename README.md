@@ -60,6 +60,22 @@ unique constraint; a duplicate webhook delivery loses the insert race, raises
 `DataIntegrityViolationException`, and is acknowledged with `200 OK` without applying the side
 effect twice. A read-then-write check would let two concurrent deliveries both pass.
 
+## Merchant Command Console & UI Architecture
+
+RazorYield provides a light, high-trust executive dashboard designed for merchant decision-makers:
+
+* **Interactive Clearance Simulator:**
+  - Real-time yield curve morphing and live tracking dot as target discount is adjusted.
+  - 1-click discount presets (`10%`, `15%`, `20%`, `25%`, `35%`) with dynamic fill slider.
+  - Plain-English business metrics: **Sales Speed** (`items/day`), **Projected Cash**, **Profit Status** (`Safe` / `At Risk`), and **Payout** (`Direct`).
+* **Sovereign Guilloché Canvas Engine:**
+  - 60 FPS dual-harmonic mathematical canvas ribbons inspired by Swiss watch dials and sovereign currency engraving.
+  - Interactive magnetic cursor deflection on a pure `#ffffff` background for zero eye-strain and maximum data clarity.
+* **1-Click Razorpay Approval:**
+  - Direct merchant approval triggers the Razorpay Payment Links API, updates inventory status, and generates copyable payment URLs instantly with zero page reloads.
+* **Guardrails HUD:**
+  - Real-time visual tracking of Margin Floor (`15%`), Daily Budget consumption, and Human Oversight triggers.
+
 ## Running it locally, with nothing installed
 
 ```bash

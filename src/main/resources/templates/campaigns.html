@@ -77,27 +77,41 @@
     </header>
 
     <!-- Main Workspace -->
+    <!-- Main Workspace -->
     <main class="main-wrapper">
         <div class="page-header" style="align-items:center;">
             <div>
                 <h1 class="page-title">Flash Sale Campaigns</h1>
-                
             </div>
             <div>
-                <a th:href="@{/}" class="btn btn-emerald">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    <span>Scan Inventory</span>
-                </a>
+                <form th:action="@{/orchestrate}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-emerald">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <span>Scan Inventory</span>
+                    </button>
+                </form>
             </div>
         </div>
 
         <!-- Filter & Search Controls Bar -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
-            <div style="display:flex; gap:0.5rem; align-items:center;">
-                <button type="button" class="btn btn-sm btn-outline filter-tab active" data-filter="all">All Campaigns</button>
-                <button type="button" class="btn btn-sm btn-outline filter-tab" data-filter="active">Active &amp; Selling</button>
-                <button type="button" class="btn btn-sm btn-outline filter-tab" data-filter="pending">Pending Approval</button>
-                <button type="button" class="btn btn-sm btn-outline filter-tab" data-filter="breach">Margin Guarded</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+            <div class="filter-tabs">
+                <button type="button" class="filter-tab active" data-filter="all">
+                    <span>All Campaigns</span>
+                    <span class="tab-count" id="count-all">0</span>
+                </button>
+                <button type="button" class="filter-tab" data-filter="active">
+                    <span>Active &amp; Selling</span>
+                    <span class="tab-count" id="count-active">0</span>
+                </button>
+                <button type="button" class="filter-tab" data-filter="pending">
+                    <span>Pending Approval</span>
+                    <span class="tab-count" id="count-pending">0</span>
+                </button>
+                <button type="button" class="filter-tab" data-filter="breach">
+                    <span>Margin Guarded</span>
+                    <span class="tab-count" id="count-breach">0</span>
+                </button>
             </div>
             <div style="position:relative; width:280px;">
                 <input type="text" id="campaignSearchInput" class="form-input" placeholder="Search SKU or product..." style="padding-left:2.2rem; font-size:0.85rem;">
@@ -109,16 +123,15 @@
             <div class="card-header">
                 <div class="card-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    <span>All Campaigns</span>
+                    <span id="cardTitleDisplay">All Campaigns</span>
                 </div>
-                <span class="badge badge-indigo" th:text="${campaigns.size()} + ' Total'">0 Total</span>
+                <span class="badge badge-indigo" id="badgeTotalDisplay" th:text="${campaigns.size()} + ' Total'">0 Total</span>
             </div>
 
             <div class="table-wrapper">
                 <div th:if="${campaigns.isEmpty()}" class="empty-state" style="text-align:center; padding:3.5rem 1.5rem;">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:1rem;"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                     <div style="font-weight:700; color:var(--text-title); font-size:1.1rem;">No Campaigns Launched Yet</div>
-                    
                 </div>
 
                 <table th:unless="${campaigns.isEmpty()}" class="data-table" id="campaignsTable">
@@ -134,13 +147,14 @@
                     </thead>
                     <tbody>
                     <tr th:each="c : ${campaigns}" 
-                        th:attr="data-status=${c.status.name()}, data-name=${c.displayName}, data-sku=${c.sku}">
+                        class="campaign-row"
+                        th:attr="data-id=${c.id}, data-status=${c.status.name()}, data-name=${c.displayName}, data-sku=${c.sku}, data-discount=${c.discountPct}, data-price=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-link=${c.razorpayLinkId != null ? c.razorpayLinkId : ''}">
                         <td>
                             <div style="font-weight:700; color:var(--text-title);" th:text="${c.displayName}">Product Name</div>
                             <div class="number-font" style="font-size:0.78rem; color:var(--text-muted);" th:text="${c.sku}">SKU-001</div>
                         </td>
                         <td>
-                            <span th:if="${c.status.name() == 'APPROVED'}" class="badge badge-emerald">
+                            <span th:if="${c.status.name() == 'APPROVED' || c.status.name() == 'AUTO_DISPATCHED'}" class="badge badge-emerald">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                                 Active &amp; Selling
                             </span>
@@ -158,22 +172,35 @@
                         <td style="text-align:right;" class="number-font" th:text="${c.discountPct} + '%'">0%</td>
                         <td class="number-font text-emerald" style="text-align:right; font-weight:700;" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</td>
                         <td>
-                            <div th:if="${c.razorpayLinkId != null}" style="display:flex; align-items:center; gap:0.5rem;">
-                                <span class="number-font text-cyan" style="font-size:0.85rem; font-weight:600;" th:text="${c.razorpayLinkId}">plink_xxx</span>
+                            <div th:if="${c.razorpayLinkId != null}" style="display:flex; align-items:center; gap:0.5rem;" onclick="event.stopPropagation();">
+                                <a th:href="'https://rzp.io/i/' + ${c.razorpayLinkId}" target="_blank" class="number-font text-cyan hover-underline" style="font-size:0.85rem; font-weight:700; display:inline-flex; align-items:center; gap:0.3rem;" title="Open Razorpay Checkout in new tab">
+                                    <span th:text="${c.razorpayLinkId}">plink_xxx</span>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                </a>
                                 <button type="button" class="btn btn-outline btn-sm copy-btn" style="padding:0.25rem 0.6rem; font-size:0.75rem;" th:attr="data-link=${c.razorpayLinkId}">
                                     Copy Link
                                 </button>
                             </div>
-                            <span th:if="${c.razorpayLinkId == null}" style="color:var(--text-subtle); font-size:0.8rem;">Not generated yet</span>
+                            <span th:if="${c.razorpayLinkId == null}" style="color:var(--text-muted); font-size:0.8rem;">Not generated yet</span>
                         </td>
                         <td style="text-align:right;">
-                            <form th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" th:action="@{/campaigns/{id}/approve(id=${c.id})}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-emerald btn-sm">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                    <span>Approve</span>
+                            <div style="display:inline-flex; align-items:center; gap:0.45rem;" onclick="event.stopPropagation();">
+                                <button type="button" class="btn btn-outline btn-sm inspect-row-btn" style="font-size:0.75rem; padding:0.25rem 0.65rem;">
+                                    Inspect
                                 </button>
-                            </form>
-                            <span th:if="${c.status.name() == 'APPROVED'}" class="badge badge-emerald">Live</span>
+                                <form th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" th:action="@{/campaigns/{id}/approve(id=${c.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-emerald btn-sm" style="font-size:0.75rem; padding:0.25rem 0.65rem;">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>Approve</span>
+                                    </button>
+                                </form>
+                                <span th:if="${c.status.name() == 'APPROVED' || c.status.name() == 'AUTO_DISPATCHED'}" class="badge badge-emerald">Live</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="filterEmptyRow" style="display:none;">
+                        <td colspan="6" style="text-align:center; padding:3rem 1.5rem; color:var(--text-muted); font-weight:600;">
+                            No campaigns match this filter. Switch tabs or click "Scan Inventory" above.
                         </td>
                     </tr>
                     </tbody>
@@ -183,26 +210,95 @@
     </main>
 </div>
 
-<!-- Floating Toast Notification -->
+<!-- Campaign Inspector Modal -->
+<div id="campaignModal" class="modal-backdrop">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div>
+                <h3 id="modalTitle" style="font-size:1.25rem; font-weight:800; color:var(--text-title); margin:0;">Product Name</h3>
+                <div id="modalSku" class="number-font" style="font-size:0.82rem; color:var(--text-muted); margin-top:0.25rem;">SKU-001</div>
+            </div>
+            <button type="button" class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        </div>
+        <div style="padding:1.4rem 0;">
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.85rem; margin-bottom:1.25rem;">
+                <div class="sim-metric-card" style="padding:0.85rem 0.5rem;">
+                    <div class="sim-metric-label">Status</div>
+                    <div id="modalStatusBadge" style="margin-top:0.35rem;"></div>
+                </div>
+                <div class="sim-metric-card" style="padding:0.85rem 0.5rem;">
+                    <div class="sim-metric-label">Discount</div>
+                    <div id="modalDiscount" class="number-font text-emerald" style="font-size:1.2rem; font-weight:800; margin-top:0.2rem;"></div>
+                </div>
+                <div class="sim-metric-card" style="padding:0.85rem 0.5rem;">
+                    <div class="sim-metric-label">Offer Price</div>
+                    <div id="modalPrice" class="number-font text-title" style="font-size:1.2rem; font-weight:800; margin-top:0.2rem;"></div>
+                </div>
+            </div>
 
+            <div style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.2rem; margin-bottom:1.25rem;">
+                <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">AI Decision Rationale</div>
+                <div id="modalReasoning" style="font-size:0.88rem; color:var(--text-body); line-height:1.5;"></div>
+            </div>
+
+            <div id="modalLinkSection" style="background:#f8fafc; border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:1.2rem;">
+                <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Razorpay Payment Checkout</div>
+                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <span id="modalLinkId" class="number-font text-cyan" style="font-weight:700; font-size:0.95rem;"></span>
+                    <a id="modalCheckoutLink" href="#" target="_blank" class="btn btn-emerald btn-sm" style="font-size:0.8rem;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        <span>Open Live Checkout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.75rem; border-top:1px solid var(--border-subtle); padding-top:1.2rem;">
+            <button type="button" class="btn btn-outline" id="modalDismissBtn">Close</button>
+            <div id="modalActionSlot"></div>
+        </div>
+    </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // Copy link handler
     document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (window.sfx) window.sfx.click();
             const link = 'https://rzp.io/i/' + btn.getAttribute('data-link');
             navigator.clipboard.writeText(link);
-            const toast = document.getElementById('toast');
-            toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 3000);
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy Link', 2000);
         });
     });
 
-    // Real-time table filter tabs
+    // Real-time table filter tabs & counts
     const tabs = document.querySelectorAll('.filter-tab');
-    const rows = document.querySelectorAll('#campaignsTable tbody tr');
+    const rows = document.querySelectorAll('#campaignsTable tbody tr.campaign-row');
+    const emptyRow = document.getElementById('filterEmptyRow');
+    const cardTitle = document.getElementById('cardTitleDisplay');
+
+    function updateCounts() {
+        const total = rows.length;
+        let active = 0, pending = 0, breach = 0;
+        rows.forEach(r => {
+            const s = r.getAttribute('data-status');
+            if (s === 'APPROVED' || s === 'AUTO_DISPATCHED') active++;
+            else if (s === 'PENDING_MERCHANT_APPROVAL') pending++;
+            else if (s === 'REJECTED_MARGIN_BREACH') breach++;
+        });
+        const cAll = document.getElementById('count-all');
+        const cActive = document.getElementById('count-active');
+        const cPending = document.getElementById('count-pending');
+        const cBreach = document.getElementById('count-breach');
+
+        if (cAll) cAll.textContent = total;
+        if (cActive) cActive.textContent = active;
+        if (cPending) cPending.textContent = pending;
+        if (cBreach) cBreach.textContent = breach;
+    }
+    updateCounts();
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -211,20 +307,34 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.classList.add('active');
             const filter = tab.getAttribute('data-filter');
 
+            const tabLabels = {
+                'all': 'All Campaigns',
+                'active': 'Active & Selling Campaigns',
+                'pending': 'Campaigns Pending Approval',
+                'breach': 'Margin Guarded Campaigns'
+            };
+            if (cardTitle && tabLabels[filter]) cardTitle.textContent = tabLabels[filter];
+
+            let visibleCount = 0;
             rows.forEach(row => {
                 const status = row.getAttribute('data-status') || '';
-                if (filter === 'all') {
+                let match = false;
+                if (filter === 'all') match = true;
+                else if (filter === 'active' && (status === 'APPROVED' || status === 'AUTO_DISPATCHED')) match = true;
+                else if (filter === 'pending' && status === 'PENDING_MERCHANT_APPROVAL') match = true;
+                else if (filter === 'breach' && status === 'REJECTED_MARGIN_BREACH') match = true;
+
+                if (match) {
                     row.style.display = '';
-                } else if (filter === 'active' && status === 'APPROVED') {
-                    row.style.display = '';
-                } else if (filter === 'pending' && status === 'PENDING_MERCHANT_APPROVAL') {
-                    row.style.display = '';
-                } else if (filter === 'breach' && status === 'REJECTED_MARGIN_BREACH') {
-                    row.style.display = '';
+                    visibleCount++;
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            if (emptyRow) {
+                emptyRow.style.display = visibleCount === 0 ? '' : 'none';
+            }
         });
     });
 
@@ -240,6 +350,95 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Modal Inspector
+    const modal = document.getElementById('campaignModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSku = document.getElementById('modalSku');
+    const modalStatusBadge = document.getElementById('modalStatusBadge');
+    const modalDiscount = document.getElementById('modalDiscount');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalReasoning = document.getElementById('modalReasoning');
+    const modalLinkId = document.getElementById('modalLinkId');
+    const modalCheckoutLink = document.getElementById('modalCheckoutLink');
+    const modalLinkSection = document.getElementById('modalLinkSection');
+    const modalActionSlot = document.getElementById('modalActionSlot');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalDismissBtn = document.getElementById('modalDismissBtn');
+
+    function openModalFor(row) {
+        if (!modal) return;
+        const id = row.getAttribute('data-id');
+        const name = row.getAttribute('data-name');
+        const sku = row.getAttribute('data-sku');
+        const status = row.getAttribute('data-status');
+        const discount = row.getAttribute('data-discount');
+        const price = row.getAttribute('data-price');
+        const link = row.getAttribute('data-link');
+
+        modalTitle.textContent = name;
+        modalSku.textContent = sku;
+        modalDiscount.textContent = discount + '%';
+        modalPrice.textContent = '₹' + price;
+
+        if (status === 'APPROVED' || status === 'AUTO_DISPATCHED') {
+            modalStatusBadge.innerHTML = '<span class="badge badge-emerald">Active & Selling</span>';
+            modalReasoning.textContent = `Campaign active and cleared through policy validator. AI predicted moving inventory at ${discount}% discount while maintaining safe margin thresholds.`;
+        } else if (status === 'PENDING_MERCHANT_APPROVAL') {
+            modalStatusBadge.innerHTML = '<span class="badge badge-amber">Approval Required</span>';
+            modalReasoning.textContent = `Autonomous proposal flagged for human oversight because the discount exceeds 10% or ₹500 threshold. Margin floor of 15% is fully cleared.`;
+        } else if (status === 'REJECTED_MARGIN_BREACH') {
+            modalStatusBadge.innerHTML = '<span class="badge badge-rose">Rejected (Margin Breach)</span>';
+            modalReasoning.textContent = `Offer price fell below the guaranteed 15% profit floor over base cost. Autonomous execution halted safely.`;
+        } else {
+            modalStatusBadge.innerHTML = `<span class="badge badge-indigo">${status}</span>`;
+            modalReasoning.textContent = `Autonomous yield recommendation generated based on days idle and sales velocity.`;
+        }
+
+        if (link && link.length > 0) {
+            modalLinkSection.style.display = 'block';
+            modalLinkId.textContent = link;
+            modalCheckoutLink.href = 'https://rzp.io/i/' + link;
+        } else {
+            modalLinkSection.style.display = 'none';
+        }
+
+        if (status === 'PENDING_MERCHANT_APPROVAL') {
+            modalActionSlot.innerHTML = `
+                <form action="/campaigns/${id}/approve" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-emerald">Approve &amp; Launch Link</button>
+                </form>
+            `;
+        } else {
+            modalActionSlot.innerHTML = '';
+        }
+
+        modal.classList.add('active');
+        if (window.sfx) window.sfx.click();
+    }
+
+    function closeModal() {
+        if (modal) modal.classList.remove('active');
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if (modalDismissBtn) modalDismissBtn.addEventListener('click', closeModal);
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    }
+
+    rows.forEach(row => {
+        row.addEventListener('click', () => openModalFor(row));
+        const inspectBtn = row.querySelector('.inspect-row-btn');
+        if (inspectBtn) {
+            inspectBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openModalFor(row);
+            });
+        }
+    });
 });
 </script>
 

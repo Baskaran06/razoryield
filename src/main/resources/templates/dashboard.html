@@ -144,33 +144,42 @@
             <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:1.8rem; align-items:center;">
                 <div>
                     <div style="margin-bottom:1.25rem;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-                            <span style="font-weight:700; color:var(--text-title); font-size:0.92rem;">Discount</span>
-                            <span class="number-font text-emerald" style="font-size:1.2rem; font-weight:800;" id="simDiscountVal">20%</span>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem; flex-wrap:wrap; gap:0.5rem;">
+                            <div style="display:flex; align-items:center; gap:0.65rem;">
+                                <span style="font-weight:700; color:var(--text-title); font-size:0.92rem;">Target Discount</span>
+                                <span class="number-font text-emerald" style="font-size:1.2rem; font-weight:800;" id="simDiscountVal">20%</span>
+                            </div>
+                            <div style="display:flex; gap:0.35rem;">
+                                <button type="button" class="sim-chip" data-pct="10">10%</button>
+                                <button type="button" class="sim-chip" data-pct="15">15%</button>
+                                <button type="button" class="sim-chip active" data-pct="20">20%</button>
+                                <button type="button" class="sim-chip" data-pct="25">25%</button>
+                                <button type="button" class="sim-chip" data-pct="35">35%</button>
+                            </div>
                         </div>
                         <input type="range" class="simulator-range" id="simDiscountSlider" min="5" max="50" value="20" step="1">
                         <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
-                            <span>5%</span>
+                            <span>5% (Min)</span>
                             <span>25%</span>
-                            <span>50%</span>
+                            <span>50% (Max)</span>
                         </div>
                     </div>
 
                     <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.75rem;">
                         <div class="sim-metric-card">
-                            <div class="sim-metric-label">Clearance Velocity</div>
-                            <div class="number-font text-emerald" style="font-size:1.05rem; font-weight:800;" id="simVelocityVal">48% in 48h</div>
+                            <div class="sim-metric-label">Sales Speed</div>
+                            <div class="number-font text-emerald" style="font-size:1.05rem; font-weight:800;" id="simVelocityVal">28 items/day</div>
                         </div>
                         <div class="sim-metric-card">
-                            <div class="sim-metric-label">Projected Capital</div>
+                            <div class="sim-metric-label">Projected Cash</div>
                             <div class="number-font text-title" style="font-size:1.05rem; font-weight:800;" id="simRevenueVal">₹1,18,400</div>
                         </div>
                         <div class="sim-metric-card">
-                            <div class="sim-metric-label">Margin Floor</div>
-                            <div class="number-font text-emerald" style="font-size:0.95rem; font-weight:800;" id="simMarginHealthVal">Safe (>22%)</div>
+                            <div class="sim-metric-label">Profit Status</div>
+                            <div class="number-font text-emerald" style="font-size:0.95rem; font-weight:800;" id="simMarginHealthVal">Safe (22%)</div>
                         </div>
                         <div class="sim-metric-card">
-                            <div class="sim-metric-label">Settlement</div>
+                            <div class="sim-metric-label">Payout</div>
                             <div class="number-font text-title" style="font-size:0.95rem; font-weight:800;">Direct</div>
                         </div>
                     </div>
@@ -181,7 +190,7 @@
                         <span>YIELD CURVE</span>
                         <span class="badge badge-emerald" style="font-size:0.68rem;">Real-time</span>
                     </div>
-                    <svg width="290" height="110" viewBox="0 0 290 110" style="overflow:visible;">
+                    <svg width="290" height="110" viewBox="0 0 290 110" style="width:100%; max-width:290px; height:auto; overflow:visible;">
                         <defs>
                             <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                 <stop offset="0%" stop-color="#059669" stop-opacity="0.25"/>
@@ -192,7 +201,9 @@
                         <line x1="10" y1="55" x2="280" y2="55" stroke="#e2e8f0" stroke-dasharray="3,3"/>
                         <line x1="10" y1="85" x2="280" y2="85" stroke="#e2e8f0" stroke-dasharray="3,3"/>
                         <path id="simYieldCurve" d="M 10 90 Q 70 65, 140 50, 210 38, 280 25 L 280 110 L 10 110 Z" fill="url(#curveGradient)" stroke="#059669" stroke-width="2.5" style="transition:d 0.25s ease;"/>
+                        <circle id="simCurveDot" cx="140" cy="50" r="5" fill="#059669" stroke="#ffffff" stroke-width="2" style="transition:all 0.2s ease;"/>
                     </svg>
+                    <div id="simLiveNote" style="font-size:0.8rem; color:var(--text-muted); margin-top:0.65rem; text-align:center; font-weight:500;">Moving 28 items/day with 22% profit protected.</div>
                 </div>
             </div>
         </div>

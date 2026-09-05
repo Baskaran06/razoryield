@@ -277,6 +277,9 @@
         const slider = document.getElementById('simDiscountSlider') || document.getElementById('yieldDiscountSlider');
         const discountDisplay = document.getElementById('simDiscountVal') || document.getElementById('simDiscountPct');
         const curvePath = document.getElementById('simYieldCurve') || document.getElementById('simCurvePath');
+        const curveDot = document.getElementById('simCurveDot');
+        const liveNote = document.getElementById('simLiveNote');
+        const chips = document.querySelectorAll('.sim-chip');
         const velEl = document.getElementById('simVelocityVal');
         const revEl = document.getElementById('simRevenueVal');
         const marginEl = document.getElementById('simMarginHealthVal') || document.getElementById('simMarginVal');
@@ -288,9 +291,19 @@
             const discount = parseInt(slider.value, 10);
             discountDisplay.textContent = discount + '%';
 
-            // Clearance formula modeling
-            const baseVelocity = 14;
-            const velocityMultiplier = Math.pow(1 + (discount / 100), 2.4);
+            // Highlight matching chip
+            chips.forEach(chip => {
+                const pct = parseInt(chip.getAttribute('data-pct'), 10);
+                chip.classList.toggle('active', pct === discount);
+            });
+
+            // Smooth colored fill on slider track
+            const fillPct = ((discount - 5) / (50 - 5)) * 100;
+            slider.style.background = `linear-gradient(to right, #059669 0%, #059669 ${fillPct}%, #e2e8f0 ${fillPct}%, #e2e8f0 100%)`;
+
+            // Velocity & recovery modeling
+            const baseVelocity = 12;
+            const velocityMultiplier = Math.pow(1 + (discount / 100), 2.2);
             const predictedVelocity = Math.round(baseVelocity * velocityMultiplier);
 
             const baseGross = 185000;
@@ -299,39 +312,62 @@
 
             const baseMargin = 38.0;
             const simulatedMargin = (baseMargin - (discount * 0.82)).toFixed(1);
+            const isSafe = parseFloat(simulatedMargin) >= 15.0;
 
-            if (velEl) velEl.textContent = predictedVelocity + ' units/day';
+            if (velEl) velEl.textContent = predictedVelocity + ' items/day';
             if (revEl) revEl.textContent = '₹' + recoveredRevenue.toLocaleString('en-IN');
             if (marginEl) {
-                if (parseFloat(simulatedMargin) < 15.0) {
-                    marginEl.textContent = 'At Risk (' + simulatedMargin + '%)';
-                    marginEl.style.color = 'var(--color-rose-dark)';
-                    if (statusEl) {
-                        statusEl.className = 'badge badge-rose';
-                        statusEl.textContent = 'Floor Breached (<15%)';
-                    }
-                } else {
+                if (isSafe) {
                     marginEl.textContent = 'Safe (' + simulatedMargin + '%)';
                     marginEl.style.color = 'var(--color-emerald-dark)';
                     if (statusEl) {
                         statusEl.className = 'badge badge-emerald';
-                        statusEl.textContent = 'Floor Protected (Safe)';
+                        statusEl.textContent = 'Safe';
+                    }
+                } else {
+                    marginEl.textContent = 'At Risk (' + simulatedMargin + '%)';
+                    marginEl.style.color = 'var(--color-rose-dark)';
+                    if (statusEl) {
+                        statusEl.className = 'badge badge-rose';
+                        statusEl.textContent = 'Below 15%';
                     }
                 }
             }
 
-            // Morph SVG curve dynamically
+            if (liveNote) {
+                liveNote.textContent = isSafe
+                    ? `Moving ${predictedVelocity} items/day with ${simulatedMargin}% profit protected.`
+                    : `Warning: ${simulatedMargin}% profit is below your 15% safety floor.`;
+                liveNote.style.color = isSafe ? 'var(--text-muted)' : 'var(--color-rose-dark)';
+            }
+
+            // Morph SVG curve dynamically and move live tracking dot
+            const norm = (discount - 5) / 45; // 0 to 1
+            const midY = 70 - (norm * 30);
+            const endY = 45 - (norm * 30);
             if (curvePath) {
-                const norm = discount / 50; // 0.1 to 1
-                const midY = 70 - (norm * 30);
-                const endY = 45 - (norm * 30);
                 curvePath.setAttribute('d', `M 10 95 Q 70 ${midY + 15}, 140 ${midY}, 210 ${endY + 10}, 280 ${endY} L 280 110 L 10 110 Z`);
+            }
+            if (curveDot) {
+                const dotX = 10 + norm * 265;
+                const dotY = (95 - norm * 68);
+                curveDot.setAttribute('cx', dotX);
+                curveDot.setAttribute('cy', Math.max(dotY, 26));
             }
         }
 
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                const pct = parseInt(chip.getAttribute('data-pct'), 10);
+                slider.value = pct;
+                recalculate();
+                if (window.sfx) window.sfx.tick();
+            });
+        });
+
         slider.addEventListener('input', () => {
             recalculate();
-            sfx.tick();
+            if (window.sfx) window.sfx.tick();
         });
 
         recalculate();

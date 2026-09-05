@@ -3,87 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RazorYield — Audit Trail &amp; Decision History</title>
+    <title>RazorYield — Compliance Audit Trail</title>
     <link rel="stylesheet" th:href="@{/app.css}">
+    <script th:src="@{/app.js}" defer></script>
 </head>
 <body>
 
+<canvas id="ambientCanvas"></canvas>
+
 <div class="app-container">
-    <!-- Top Glass Navigation Bar -->
     <header class="navbar-glass">
         <div class="brand-wrapper">
             <div class="brand-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
             </div>
             <div>
-                <div class="brand-title">RazorYield</div>
-                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale Orchestrator</div>
+                <div class="brand-title">RazorYield <span class="brand-tag">Audit</span></div>
+                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale &amp; Margin Guardrail Engine</div>
             </div>
         </div>
-
         <ul class="nav-links">
-            <li><a th:href="@{/}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a></li>
-            <li><a th:href="@{/campaigns}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                Campaigns
-            </a></li>
-            <li><a th:href="@{/inventory}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                Inventory
-            </a></li>
-            <li><a th:href="@{/payments}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Payouts
-            </a></li>
-            <li><a th:href="@{/activity}" class="nav-link active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                Audit Trail
-            </a></li>
-            <li><a th:href="@{/settings}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                Settings
-            </a></li>
+            <li><a th:href="@{/}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a></li>
+            <li><a th:href="@{/campaigns}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Campaigns</a></li>
+            <li><a th:href="@{/inventory}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Inventory</a></li>
+            <li><a th:href="@{/payments}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Payouts</a></li>
+            <li><a th:href="@{/activity}" class="nav-link active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Audit Trail</a></li>
+            <li><a th:href="@{/settings}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</a></li>
         </ul>
-
-        <div class="header-status-pill">
-            <span class="pulse-dot"></span>
-            <span>Razorpay Active</span>
+        <div class="nav-actions">
+            <button type="button" class="command-kbd-chip command-palette-trigger"><span>Quick Actions</span><span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:rgba(255,255,255,0.1); padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span></button>
+            <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>SFX: ON</span></button>
+            <div class="header-status-pill"><span class="pulse-dot"></span><span>Razorpay Active</span></div>
         </div>
     </header>
 
-    <!-- Main Content Workspace -->
     <main class="main-wrapper">
-        <div class="page-header">
+        <div class="page-header anim-reveal">
             <div>
                 <h1 class="page-title">Compliance Audit Trail</h1>
-                <p class="page-subtitle">Unchangeable append-only history of campaign approvals, AI pricing decisions, and policy guardrail checks</p>
+                <p class="page-subtitle">Immutable append-only history of campaign approvals, AI pricing decisions, and policy guardrail checks</p>
             </div>
+            <span class="badge badge-indigo" th:text="${auditEntries.size()} + ' Events Logged'" style="font-size:0.85rem; padding:0.5rem 0.85rem;">0 Events Logged</span>
         </div>
 
-        <div class="card-glass">
+        <!-- Audit Filter Tabs -->
+        <div class="filter-tabs anim-reveal" style="margin-bottom:1.5rem;">
+            <button class="filter-tab active" data-filter="all">All Events</button>
+            <button class="filter-tab" data-filter="approved">Approved</button>
+            <button class="filter-tab" data-filter="rejected">Rejected</button>
+            <button class="filter-tab" data-filter="guardrail">Guardrail Blocked</button>
+        </div>
+
+        <div class="card-glass anim-reveal">
             <div class="card-header">
                 <div class="card-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
                     <span>Permanent Event Ledger</span>
                 </div>
-                <span class="badge badge-indigo" th:text="${auditEntries.size()} + ' Events Logged'">0 Events Logged</span>
             </div>
 
             <div class="card-body">
-                <div th:if="${auditEntries.isEmpty()}" class="empty-state">
-                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    <div style="font-weight:600; color:var(--text-title);">Audit trail is empty</div>
-                    <p style="font-size:0.85rem; margin-top:0.35rem;">Events will appear here as soon as an opportunity scan cycle is initiated.</p>
+                <div th:if="${auditEntries.isEmpty()}" style="text-align:center; padding:3.5rem 1.5rem;">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" style="margin-bottom:1rem; opacity:0.5;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <div style="font-weight:700; color:var(--text-title); font-size:1.1rem;">Audit Trail Empty</div>
+                    <p style="font-size:0.9rem; margin-top:0.4rem; color:var(--text-muted); max-width:420px; margin-left:auto; margin-right:auto;">Events appear here as soon as an opportunity scan cycle is initiated. Every AI pricing decision and human override is permanently recorded.</p>
                 </div>
 
-                <ul th:unless="${auditEntries.isEmpty()}" class="timeline-list">
-                    <li class="timeline-node" th:each="a : ${auditEntries}">
+                <ul th:unless="${auditEntries.isEmpty()}" class="timeline-list" id="auditTimeline">
+                    <li class="timeline-node" th:each="a : ${auditEntries}"
+                        th:attr="data-verdict=${a.humanVerdict}">
                         <div class="timeline-node-time number-font" th:text="${a.formattedCreatedAt}">Timestamp</div>
                         <div class="timeline-node-title">
                             <span th:text="${a.humanVerdict}">Event Title</span> —
@@ -92,7 +80,7 @@
                         <div style="margin-top:0.35rem; font-size:0.85rem; color:var(--text-body); line-height:1.6;">
                             <div style="font-weight:600; color:var(--text-title);" th:text="${a.llmReasoning}">AI Rationale</div>
                             <div style="margin-top:0.25rem; font-size:0.8rem;" class="number-font">
-                                Offer price: <strong class="text-emerald" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</strong> | 
+                                Offer price: <strong class="text-emerald" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</strong> |
                                 Discount: <strong th:text="${a.discountPct} + '%'">0%</strong>
                             </div>
                         </div>
@@ -102,6 +90,33 @@
         </div>
     </main>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const nodes = document.querySelectorAll('#auditTimeline .timeline-node');
+    tabs.forEach(tab => {
+        tab.style.cursor = 'pointer';
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const filter = tab.getAttribute('data-filter');
+            nodes.forEach(node => {
+                const verdict = (node.getAttribute('data-verdict') || '').toLowerCase();
+                if (filter === 'all') {
+                    node.style.display = '';
+                } else if (filter === 'approved') {
+                    node.style.display = verdict.includes('approved') || verdict.includes('accept') ? '' : 'none';
+                } else if (filter === 'rejected') {
+                    node.style.display = verdict.includes('reject') || verdict.includes('denied') ? '' : 'none';
+                } else if (filter === 'guardrail') {
+                    node.style.display = verdict.includes('guardrail') || verdict.includes('block') || verdict.includes('margin') ? '' : 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 
 </body>
 </html>

@@ -3,63 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RazorYield — Store Settings &amp; Safeguards</title>
+    <title>RazorYield — Store Guardrails &amp; Configuration</title>
     <link rel="stylesheet" th:href="@{/app.css}">
+    <script th:src="@{/app.js}" defer></script>
 </head>
 <body>
 
+<canvas id="ambientCanvas"></canvas>
+
 <div class="app-container">
-    <!-- Top Glass Navigation Bar -->
     <header class="navbar-glass">
         <div class="brand-wrapper">
             <div class="brand-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                    <polyline points="17 6 23 6 23 12"/>
-                </svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
             </div>
             <div>
-                <div class="brand-title">RazorYield</div>
-                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale Orchestrator</div>
+                <div class="brand-title">RazorYield <span class="brand-tag">Settings</span></div>
+                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale &amp; Margin Guardrail Engine</div>
             </div>
         </div>
-
         <ul class="nav-links">
-            <li><a th:href="@{/}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                Dashboard
-            </a></li>
-            <li><a th:href="@{/campaigns}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                Campaigns
-            </a></li>
-            <li><a th:href="@{/inventory}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                Inventory
-            </a></li>
-            <li><a th:href="@{/payments}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Payouts
-            </a></li>
-            <li><a th:href="@{/activity}" class="nav-link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                Audit Trail
-            </a></li>
-            <li><a th:href="@{/settings}" class="nav-link active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                Settings
-            </a></li>
+            <li><a th:href="@{/}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Dashboard</a></li>
+            <li><a th:href="@{/campaigns}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Campaigns</a></li>
+            <li><a th:href="@{/inventory}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Inventory</a></li>
+            <li><a th:href="@{/payments}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Payouts</a></li>
+            <li><a th:href="@{/activity}" class="nav-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Audit Trail</a></li>
+            <li><a th:href="@{/settings}" class="nav-link active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</a></li>
         </ul>
-
-        <div class="header-status-pill">
-            <span class="pulse-dot"></span>
-            <span>Razorpay Active</span>
+        <div class="nav-actions">
+            <button type="button" class="command-kbd-chip command-palette-trigger"><span>Quick Actions</span><span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:rgba(255,255,255,0.1); padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span></button>
+            <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>SFX: ON</span></button>
+            <div class="header-status-pill"><span class="pulse-dot"></span><span>Razorpay Active</span></div>
         </div>
     </header>
 
-    <!-- Main Content Workspace -->
     <main class="main-wrapper">
-        <div class="page-header">
+        <div class="page-header anim-reveal">
             <div>
                 <h1 class="page-title">Store Guardrails &amp; Configuration</h1>
                 <p class="page-subtitle">Configure merchant authentication keys, financial clearance budgets, and gateway integrations</p>
@@ -67,14 +46,15 @@
         </div>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
-            
+
             <!-- Merchant Access Key Card -->
-            <div class="card-glass">
+            <div class="card-glass anim-reveal">
                 <div class="card-header">
                     <div class="card-title">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                        <span>Merchant Authentication Key</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <span>Merchant Authentication</span>
                     </div>
+                    <span class="badge badge-emerald">Active</span>
                 </div>
                 <div class="card-body">
                     <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
@@ -82,58 +62,97 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Current Access Key</label>
-                        <input type="text" class="form-input number-font" readonly value="mk_local_dev_key" style="background:rgba(0,0,0,0.4); color:var(--color-emerald); font-weight:700;">
+                        <div style="position:relative;">
+                            <input type="password" class="form-input number-font" readonly value="mk_local_dev_key" id="merchantKey" style="background:rgba(0,0,0,0.4); color:var(--color-emerald); font-weight:700; padding-right:3rem;">
+                            <button type="button" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; padding:0.35rem;" onclick="const i=document.getElementById('merchantKey'); i.type=i.type==='password'?'text':'password';">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
                     </div>
-                    <span class="badge badge-emerald">Default Local Dev Key Active</span>
+                    <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+                        <span class="badge badge-emerald">Default Local Dev Key Active</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Financial Guardrail Limits Card -->
-            <div class="card-glass">
+            <div class="card-glass anim-reveal">
                 <div class="card-header">
                     <div class="card-title">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         <span>Automated Margin Guardrails</span>
                     </div>
                 </div>
                 <div class="card-body">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
-                            <div style="font-size:0.75rem; color:var(--text-muted);">MINIMUM PROFIT FLOOR</div>
-                            <div class="number-font" style="font-size:1.5rem; font-weight:700; color:var(--color-emerald); margin-top:0.25rem;">15.0%</div>
+                        <div style="background:rgba(0,0,0,0.3); padding:1.15rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Minimum Profit Floor</div>
+                            <div class="number-font" style="font-size:1.65rem; font-weight:700; color:var(--color-emerald); margin-top:0.35rem;">15.0%</div>
                             <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.25rem;">Above cost price</div>
                         </div>
-
-                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
-                            <div style="font-size:0.75rem; color:var(--text-muted);">DAILY CLEARANCE BUDGET</div>
-                            <div class="number-font" style="font-size:1.5rem; font-weight:700; color:var(--text-title); margin-top:0.25rem;" th:text="'₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹20,000</div>
+                        <div style="background:rgba(0,0,0,0.3); padding:1.15rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Daily Clearance Budget</div>
+                            <div class="number-font" style="font-size:1.65rem; font-weight:700; color:var(--text-title); margin-top:0.35rem;" th:text="'₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹20,000</div>
                             <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.25rem;">Protected by Redis cap</div>
                         </div>
                     </div>
-                    <div style="font-size:0.8rem; color:var(--text-muted);">Discount proposals breaching the 15% margin floor or daily clearance budget are automatically rejected by system policy validators.</div>
+                    <div style="font-size:0.8rem; color:var(--text-muted); line-height:1.55;">Discount proposals breaching the 15% margin floor or daily clearance budget are automatically rejected by system policy validators.</div>
                 </div>
             </div>
 
             <!-- Razorpay Gateway Integration Card -->
-            <div class="card-glass" style="grid-column: 1 / -1;">
+            <div class="card-glass anim-reveal" style="grid-column: 1 / -1;">
                 <div class="card-header">
                     <div class="card-title">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                        <span>Razorpay Payment Gateway Integration</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        <span>Razorpay Payment Gateway</span>
                     </div>
                     <span class="badge badge-indigo">Simulated &amp; Live Supported</span>
                 </div>
                 <div class="card-body">
-                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:2rem;">
                         <div>
-                            <div style="font-weight:600; color:var(--text-title);">Active Mode: Simulated Payment Gateway</div>
-                            <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">Generating test payment links (<code>https://rzp.io/i/simulated_xxx</code>). Set <code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code> in environment properties to enable live Razorpay API links.</div>
+                            <div style="font-weight:700; color:var(--text-title); font-size:1rem;">Active Mode: Simulated Payment Gateway</div>
+                            <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.3rem; line-height:1.55;">Generating test payment links (<code class="number-font" style="color:var(--color-cyan);">https://rzp.io/i/simulated_xxx</code>). Set <code>RAZORPAY_KEY_ID</code> and <code>RAZORPAY_KEY_SECRET</code> in environment properties to enable live Razorpay API links.</div>
                         </div>
-                        <span class="badge badge-emerald" style="padding:0.5rem 0.85rem;">Online &amp; Active</span>
+                        <span class="badge badge-emerald" style="padding:0.5rem 0.85rem; white-space:nowrap;">Online &amp; Active</span>
                     </div>
                 </div>
             </div>
 
+            <!-- System Architecture Card -->
+            <div class="card-glass anim-reveal" style="grid-column: 1 / -1;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-cyan)" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        <span>System Architecture</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:1rem;">
+                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Runtime</div>
+                            <div class="number-font" style="font-weight:700; color:var(--text-title); margin-top:0.4rem;">Spring Boot 3</div>
+                            <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.2rem;">+ Thymeleaf SSR</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Database</div>
+                            <div class="number-font" style="font-weight:700; color:var(--text-title); margin-top:0.4rem;">PostgreSQL</div>
+                            <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.2rem;">+ Redis Cache</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">AI Engine</div>
+                            <div class="number-font" style="font-weight:700; color:var(--text-title); margin-top:0.4rem;">Gemini LLM</div>
+                            <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.2rem;">Dynamic Pricing</div>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); text-align:center;">
+                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Payments</div>
+                            <div class="number-font" style="font-weight:700; color:var(--text-title); margin-top:0.4rem;">Razorpay</div>
+                            <div style="font-size:0.75rem; color:var(--text-subtle); margin-top:0.2rem;">Payment Links API</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>

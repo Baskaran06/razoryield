@@ -343,14 +343,14 @@
 
             // Morph SVG curve dynamically and move live tracking dot
             const norm = (discount - 5) / 45; // 0 to 1
-            const midY = 70 - (norm * 30);
-            const endY = 45 - (norm * 30);
+            const midY = 80 - (norm * 35);
+            const endY = 52 - (norm * 35);
             if (curvePath) {
-                curvePath.setAttribute('d', `M 10 95 Q 70 ${midY + 15}, 140 ${midY}, 210 ${endY + 10}, 280 ${endY} L 280 110 L 10 110 Z`);
+                curvePath.setAttribute('d', `M 15 105 Q 80 ${midY + 16}, 165 ${midY}, 245 ${endY + 10}, 325 ${endY} L 325 125 L 15 125 Z`);
             }
             if (curveDot) {
-                const dotX = 10 + norm * 265;
-                const dotY = (95 - norm * 68);
+                const dotX = 15 + norm * 305;
+                const dotY = (105 - norm * 76);
                 curveDot.setAttribute('cx', dotX);
                 curveDot.setAttribute('cy', Math.max(dotY, 26));
             }

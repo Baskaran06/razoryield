@@ -844,105 +844,200 @@ body {
   background: #ffffff;
   border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
-  padding: 1.6rem 1.75rem;
+  padding: 2.25rem 2.4rem;
   box-shadow: var(--shadow-card);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .simulator-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.simulator-slider-wrapper {
-  margin: 1.5rem 0 1rem;
+.simulator-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5rem;
+  align-items: stretch;
 }
 
-.simulator-range {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  height: 8px;
-  border-radius: 999px;
-  background: #e2e8f0;
-  outline: none;
-  cursor: pointer;
+.sim-controls-pane {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sim-slider-block {
+  margin-bottom: 1.75rem;
+}
+
+.sim-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.sim-val-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.sim-chips-group {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
 }
 
 .sim-chip {
-  padding: 0.28rem 0.65rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #cbd5e1;
   background: #f8fafc;
-  color: var(--text-muted);
-  font-size: 0.78rem;
+  color: var(--text-body);
+  font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.18s ease;
   font-family: var(--font-body);
 }
 
 .sim-chip:hover {
   background: #ffffff;
-  color: var(--text-title);
-  border-color: #cbd5e1;
+  color: var(--color-emerald-dark);
+  border-color: var(--color-emerald);
+  transform: translateY(-1px);
 }
 
 .sim-chip.active {
   background: var(--color-emerald);
   color: #ffffff;
   border-color: var(--color-emerald);
-  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+  font-weight: 700;
+}
+
+.simulator-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  outline: none;
+  cursor: pointer;
+  margin: 0.75rem 0 0.4rem;
 }
 
 .simulator-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: var(--color-emerald);
-  border: 3px solid #ffffff;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.4);
+  border: 3.5px solid #ffffff;
+  box-shadow: 0 3px 10px rgba(5, 150, 105, 0.4);
   cursor: pointer;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .simulator-range::-webkit-slider-thumb:hover {
   transform: scale(1.15);
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.55);
+}
+
+.sim-range-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .simulator-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  margin-top: 1.25rem;
 }
 
 .sim-metric-card {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-sm);
-  padding: 0.9rem 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 0.9rem;
   text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 94px;
+}
+
+.sim-metric-card:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .sim-metric-label {
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
 }
 
-.sim-metric-value {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  font-weight: 800;
-  color: var(--text-title);
-  margin-top: 0.2rem;
+.simulator-curve-pane {
+  background: #f8fafc;
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1.85rem;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sim-curve-top {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 1.1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  letter-spacing: 0.05em;
+}
+
+.sim-curve-svg {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  overflow: visible;
+}
+
+.sim-live-note {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin-top: 1.15rem;
+  text-align: center;
+  font-weight: 500;
+  min-height: 2.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ==========================================================================
@@ -1199,6 +1294,13 @@ body {
   }
   .proposal-card {
     grid-template-columns: 1fr;
+  }
+  .simulator-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .simulator-box {
+    padding: 1.6rem 1.4rem;
   }
   .simulator-metrics-grid {
     grid-template-columns: 1fr 1fr;

@@ -271,15 +271,15 @@
     }
 
     // =========================================================================
-    // 4. INTERACTIVE REAL-TIME AI YIELD SIMULATOR
+    // 4. INTERACTIVE REAL-TIME CLEARANCE SIMULATOR
     // =========================================================================
     function initYieldSimulator() {
-        const slider = document.getElementById('yieldDiscountSlider');
-        const discountDisplay = document.getElementById('simDiscountPct');
-        const curvePath = document.getElementById('simCurvePath');
+        const slider = document.getElementById('simDiscountSlider') || document.getElementById('yieldDiscountSlider');
+        const discountDisplay = document.getElementById('simDiscountVal') || document.getElementById('simDiscountPct');
+        const curvePath = document.getElementById('simYieldCurve') || document.getElementById('simCurvePath');
         const velEl = document.getElementById('simVelocityVal');
         const revEl = document.getElementById('simRevenueVal');
-        const marginEl = document.getElementById('simMarginVal');
+        const marginEl = document.getElementById('simMarginHealthVal') || document.getElementById('simMarginVal');
         const statusEl = document.getElementById('simStatusBadge');
 
         if (!slider || !discountDisplay) return;
@@ -303,29 +303,29 @@
             if (velEl) velEl.textContent = predictedVelocity + ' units/day';
             if (revEl) revEl.textContent = '₹' + recoveredRevenue.toLocaleString('en-IN');
             if (marginEl) {
-                marginEl.textContent = simulatedMargin + '%';
                 if (parseFloat(simulatedMargin) < 15.0) {
+                    marginEl.textContent = 'At Risk (' + simulatedMargin + '%)';
                     marginEl.style.color = 'var(--color-rose-dark)';
                     if (statusEl) {
                         statusEl.className = 'badge badge-rose';
-                        statusEl.textContent = 'Guardrail Breached (<15%)';
+                        statusEl.textContent = 'Floor Breached (<15%)';
                     }
                 } else {
+                    marginEl.textContent = 'Safe (' + simulatedMargin + '%)';
                     marginEl.style.color = 'var(--color-emerald-dark)';
                     if (statusEl) {
                         statusEl.className = 'badge badge-emerald';
-                        statusEl.textContent = 'Guardrail Compliant (Safe)';
+                        statusEl.textContent = 'Floor Protected (Safe)';
                     }
                 }
             }
 
             // Morph SVG curve dynamically
             if (curvePath) {
-                const norm = discount / 50; // 0 to 1
-                const cpY1 = 120 - (norm * 75);
-                const cpY2 = 80 - (norm * 55);
-                const endY = 40 + (norm * 45);
-                curvePath.setAttribute('d', `M 20 140 C 140 ${cpY1}, 280 ${cpY2}, 460 ${endY}`);
+                const norm = discount / 50; // 0.1 to 1
+                const midY = 70 - (norm * 30);
+                const endY = 45 - (norm * 30);
+                curvePath.setAttribute('d', `M 10 95 Q 70 ${midY + 15}, 140 ${midY}, 210 ${endY + 10}, 280 ${endY} L 280 110 L 10 110 Z`);
             }
         }
 
@@ -550,5 +550,9 @@
             el.addEventListener('mouseenter', () => sfx.tick());
         });
     });
+
+    // Expose helpers globally
+    window.sfx = sfx;
+    window.triggerConfetti = triggerConfetti;
 
 })();

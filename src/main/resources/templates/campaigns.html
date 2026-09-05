@@ -170,9 +170,12 @@
                             <span th:if="${c.razorpayLinkId == null}" style="color:var(--text-subtle); font-size:0.8rem;">Not generated yet</span>
                         </td>
                         <td style="text-align:right;">
-                            <a th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" th:href="@{/}" class="btn btn-emerald btn-sm">
-                                Review &amp; Authorize
-                            </a>
+                            <form th:if="${c.status.name() == 'PENDING_MERCHANT_APPROVAL'}" th:action="@{/campaigns/{id}/approve(id=${c.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-emerald btn-sm">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Approve</span>
+                                </button>
+                            </form>
                             <span th:if="${c.status.name() == 'APPROVED'}" class="badge badge-emerald">Live</span>
                         </td>
                     </tr>

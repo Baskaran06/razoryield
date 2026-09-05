@@ -1,17 +1,27 @@
 package com.razoryield.web;
 
+import com.razoryield.campaign.AuditService;
 import com.razoryield.campaign.CampaignOrchestrationService;
+import com.razoryield.domain.Campaign;
+import com.razoryield.domain.CampaignAuditLog;
 import com.razoryield.domain.CampaignAuditLogRepository;
 import com.razoryield.domain.CampaignRepository;
 import com.razoryield.domain.CampaignStatus;
+import com.razoryield.domain.CustomerCohort;
+import com.razoryield.domain.CustomerCohortRepository;
+import com.razoryield.domain.Product;
 import com.razoryield.domain.ProductRepository;
 import com.razoryield.gateway.PaymentGateway;
 import com.razoryield.policy.DiscountPolicyValidator;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.UUID;
 
 /**
  * Controller for the merchant-facing UI pages.
@@ -27,6 +37,8 @@ public class DashboardController {
     private final CampaignOrchestrationService orchestrator;
     private final PaymentGateway paymentGateway;
     private final MerchantDashboardService merchantDashboardService;
+    private final AuditService auditService;
+    private final CustomerCohortRepository cohortRepository;
 
     public DashboardController(CampaignRepository campaignRepository,
                                CampaignAuditLogRepository auditLogRepository,
@@ -34,7 +46,9 @@ public class DashboardController {
                                DiscountPolicyValidator policyValidator,
                                CampaignOrchestrationService orchestrator,
                                PaymentGateway paymentGateway,
-                               MerchantDashboardService merchantDashboardService) {
+                               MerchantDashboardService merchantDashboardService,
+                               AuditService auditService,
+                               CustomerCohortRepository cohortRepository) {
         this.campaignRepository = campaignRepository;
         this.auditLogRepository = auditLogRepository;
         this.productRepository = productRepository;
@@ -42,6 +56,8 @@ public class DashboardController {
         this.orchestrator = orchestrator;
         this.paymentGateway = paymentGateway;
         this.merchantDashboardService = merchantDashboardService;
+        this.auditService = auditService;
+        this.cohortRepository = cohortRepository;
     }
 
     private void populateCommonAttributes(Model model, String activeTab) {
@@ -122,5 +138,41 @@ public class DashboardController {
     public String runOrchestration() {
         orchestrator.runCycle();
         return "redirect:/?orchestrated=true";
+    }
+
+    @PostMapping("/campaigns/{id}/approve")
+    @Transactional
+    public String approveCampaign(@PathVariable UUID id) {
+        var campaignOpt = campaignRepository.findById(id);
+        if (campaignOpt.isPresent()) {
+            var campaign = campaignOpt.get();
+            if (campaign.getStatus() == CampaignStatus.PENDING_MERCHANT_APPROVAL) {
+                String contact = cohortRepository.findTargetable().stream()
+                        .findFirst()
+                        .map(CustomerCohort::getPhoneNumber)
+                        .orElse("+910000000000");
+                String linkId = paymentGateway.createPaymentLink(
+                        campaign.getId().toString(), campaign.getSku(), campaign.getOfferPricePaise(), contact);
+                campaign.setStatus(CampaignStatus.APPROVED);
+                campaign.setRazorpayLinkId(linkId);
+                campaignRepository.save(campaign);
+
+                var product = productRepository.findById(campaign.getSku()).orElse(null);
+                auditService.append(CampaignAuditLog.builder()
+                        .campaignId(campaign.getId())
+                        .sku(campaign.getSku())
+                        .costPricePaise(product == null ? 0L : product.getCostPricePaise())
+                        .basePricePaise(product == null ? campaign.getOfferPricePaise() : product.getBasePricePaise())
+                        .discountPct(campaign.getDiscountPct())
+                        .offerPricePaise(campaign.getOfferPricePaise())
+                        .llmReasoning("Merchant approved clearance offer.")
+                        .gateVerdict("MANUALLY_APPROVED")
+                        .approverUserId("MERCHANT_ADMIN")
+                        .razorpayLinkId(linkId)
+                        .settlementStatus("PENDING")
+                        .build());
+            }
+        }
+        return "redirect:/?approved=true";
     }
 }

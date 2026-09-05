@@ -107,7 +107,7 @@ body {
   position: relative;
 }
 
-/* Premium Light Background Canvas */
+/* Pure Clean Light White Background */
 #ambientCanvas {
   position: fixed;
   top: 0;
@@ -116,25 +116,6 @@ body {
   height: 100vh;
   z-index: 0;
   pointer-events: none;
-}
-
-/* Subtle Architectural Grid Pattern on White */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(5, 150, 105, 0.04) 0%, transparent 60%),
-    radial-gradient(circle at 100% 50%, rgba(79, 70, 229, 0.03) 0%, transparent 50%),
-    radial-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 28px 28px;
-  background-position: 0 0, 0 0, -1px -1px;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.75;
 }
 
 /* App Container */

@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RazorYield — Autonomous Clearance Command Center</title>
+    <title>RazorYield — Inventory Clearance</title>
     <link rel="stylesheet" th:href="@{/app.css}">
     <script th:src="@{/app.js}" defer></script>
 </head>
 <body>
 
-<!-- 3D Ambient WebGL / Canvas Constellation -->
+<!-- Ambient Fluid Canvas -->
 <canvas id="ambientCanvas"></canvas>
 
 <div class="app-container">
-    <!-- Glass Navigation Bar -->
+    <!-- Clean Glass Navigation Bar -->
     <header class="navbar-glass">
         <div class="brand-wrapper">
             <div class="brand-icon">
@@ -25,9 +25,8 @@
             <div>
                 <div class="brand-title">
                     RazorYield
-                    <span class="brand-tag">Agentic v2.4</span>
                 </div>
-                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale &amp; Margin Guardrail Engine</div>
+                <div style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">Clearance &amp; Margin Protection</div>
             </div>
         </div>
 
@@ -60,13 +59,13 @@
 
         <div class="nav-actions">
             <!-- Command Palette Trigger -->
-            <button type="button" class="command-kbd-chip command-palette-trigger" title="Open Quick Command Bar">
+            <button type="button" class="command-kbd-chip command-palette-trigger" title="Open Quick Actions">
                 <span>Quick Actions</span>
-                <span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:rgba(255,255,255,0.1); padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span>
+                <span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:#f1f5f9; padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span>
             </button>
 
             <!-- SFX Toggle -->
-            <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle" title="Toggle Acoustic Haptics">
+            <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle" title="Audio Haptics">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
                 <span>SFX: ON</span>
             </button>
@@ -74,22 +73,22 @@
             <!-- Live Status -->
             <div class="header-status-pill">
                 <span class="pulse-dot"></span>
-                <span>Razorpay Test Gateway</span>
+                <span>Gateway Active</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Command Workspace -->
+    <!-- Main Workspace -->
     <main class="main-wrapper">
         
-        <!-- Page Action Header -->
+        <!-- Header -->
         <div class="page-header">
             <div>
-                <h1 class="page-title">Smart Inventory Clearance</h1>
-                <p class="page-subtitle">Turn slow-moving stock into cash while guaranteeing your profit margins.</p>
+                <h1 class="page-title">Inventory Clearance</h1>
+                <p class="page-subtitle">Turn slow-moving stock into cash while protecting your profit margins.</p>
             </div>
             
-            <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div>
                 <form th:action="@{/orchestrate}" method="post" id="orchestrateForm">
                     <button type="submit" class="btn btn-emerald" id="scanBtn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -101,46 +100,19 @@
             </div>
         </div>
 
-        <!-- Notification Banner -->
+        <!-- Notification Alerts -->
         <div id="alertContainer">
             <div th:if="${param.orchestrated}" class="badge badge-emerald" style="width:100%; padding:0.85rem 1.25rem; font-size:0.88rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                Scan complete! New clearance proposals are ready below for your review.
+                Scan complete. Clearance proposals are ready below for review.
+            </div>
+            <div th:if="${param.approved}" class="badge badge-emerald" style="width:100%; padding:0.85rem 1.25rem; font-size:0.88rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Campaign approved successfully. Checkout payment link is live.
             </div>
         </div>
 
-        <!-- Simple 3-Step Process -->
-        <div class="process-pipeline-banner">
-            <div class="process-banner-title">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span>How It Works — Simple 3-Step Clearance</span>
-            </div>
-            <div class="process-steps-grid">
-                <div class="process-step-card">
-                    <div class="process-step-num">Step 1</div>
-                    <div class="process-step-name">Find Slow Stock</div>
-                    <div class="process-step-desc">Flags items unsold for 30+ days tying up your money.</div>
-                </div>
-                <div class="process-step-arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-                <div class="process-step-card">
-                    <div class="process-step-num">Step 2</div>
-                    <div class="process-step-name">Smart Pricing</div>
-                    <div class="process-step-desc">Suggests safe discounts that keep at least 15% profit.</div>
-                </div>
-                <div class="process-step-arrow">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                </div>
-                <div class="process-step-card">
-                    <div class="process-step-num">Step 3</div>
-                    <div class="process-step-name">1-Click Payout</div>
-                    <div class="process-step-desc">Approve to get a Razorpay link and receive money directly.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Core Metric Cards -->
+        <!-- Metric Cards -->
         <div class="hero-grid" style="grid-template-columns: repeat(4, 1fr);">
             <div class="stat-card stat-card-emerald">
                 <div class="stat-label">
@@ -157,7 +129,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 </div>
                 <div class="stat-value number-font" th:text="${unitsMoved}">0</div>
-                <div class="stat-footer"><span>Moved out of storage</span></div>
+                <div class="stat-footer"><span>Cleared from stock</span></div>
             </div>
 
             <div class="stat-card stat-card-indigo">
@@ -165,8 +137,8 @@
                     <span>Ready for Review</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 </div>
-                <div class="stat-value number-font text-indigo" th:text="${pendingCount}">0</div>
-                <div class="stat-footer"><span>Waiting for your approval</span></div>
+                <div class="stat-value number-font text-indigo" id="pendingCountDisplay" th:text="${pendingCount}">0</div>
+                <div class="stat-footer"><span>Awaiting your approval</span></div>
             </div>
 
             <div class="stat-card stat-card-amber">
@@ -178,57 +150,18 @@
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" th:style="'width:' + ${dailyCapPaise > 0 ? (consumedPaise * 100.0 / dailyCapPaise) : 0} + '%'"></div>
                 </div>
-                <div class="stat-footer"><span>Prevents over-discounting</span></div>
+                <div class="stat-footer"><span>Daily safety cap</span></div>
             </div>
         </div>
 
-        <!-- Built-in Safety Protections -->
-        <div class="guardrails-hud">
-            <div class="gate-card">
-                <div class="gate-icon" style="background:#ecfdf5; color:var(--color-emerald); border:1px solid #a7f3d0;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div>
-                    <div class="gate-title">15% Profit Protection</div>
-                    <div class="gate-desc">Prices are locked at least 15% above your cost. You never take a loss.</div>
-                    <span class="gate-status-pill badge-emerald"><span class="pulse-dot"></span> Protected</span>
-                </div>
-            </div>
-
-            <div class="gate-card">
-                <div class="gate-icon" style="background:#eef2ff; color:var(--color-indigo); border:1px solid #c7d2fe;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <div>
-                    <div class="gate-title">₹20,000 Daily Limit</div>
-                    <div class="gate-desc">Caps total daily discounts so sales never hurt your overall revenue.</div>
-                    <span class="gate-status-pill badge-indigo"><span class="pulse-dot" style="background:var(--color-indigo);"></span> Active</span>
-                </div>
-            </div>
-
-            <div class="gate-card">
-                <div class="gate-icon" style="background:#fffbeb; color:var(--color-amber); border:1px solid #fde68a;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                </div>
-                <div>
-                    <div class="gate-title">You Have Final Say</div>
-                    <div class="gate-desc">Discounts only launch when you review and click Approve.</div>
-                    <span class="gate-status-pill badge-amber"><span class="pulse-dot" style="background:var(--color-amber);"></span> Safe</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- REAL-TIME AI YIELD & MARGIN SIMULATOR (LIVE INTERACTIVE WIDGET) -->
+        <!-- Clearance Simulator -->
         <div class="simulator-box">
             <div class="simulator-header">
-                <div>
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        <span style="font-size:1.15rem; font-weight:800; color:var(--text-title); font-family:var(--font-display);">Real-Time AI Yield &amp; Clearance Simulator</span>
-                    </div>
-                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Adjust discount elasticity to simulate velocity gains, recovered capital, and 15% margin floor protection before launching live flash campaigns.</p>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    <span style="font-size:1.15rem; font-weight:800; color:var(--text-title); font-family:var(--font-display);">Clearance Simulator</span>
                 </div>
-                <span class="badge badge-indigo">Interactive Yield Model</span>
+                <span class="badge badge-indigo">Live Preview</span>
             </div>
 
             <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:1.8rem; align-items:center;">
@@ -240,9 +173,9 @@
                         </div>
                         <input type="range" class="simulator-range" id="simDiscountSlider" min="5" max="50" value="20" step="1">
                         <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
-                            <span>5% (Conservative)</span>
-                            <span>25% (Balanced Velocity)</span>
-                            <span>50% (Aggressive Clearance)</span>
+                            <span>5%</span>
+                            <span>25%</span>
+                            <span>50%</span>
                         </div>
                     </div>
 
@@ -261,15 +194,15 @@
                         </div>
                         <div class="sim-metric-card">
                             <div class="sim-metric-label">Settlement</div>
-                            <div class="number-font text-title" style="font-size:0.95rem; font-weight:800;">T+0 Direct</div>
+                            <div class="number-font text-title" style="font-size:0.95rem; font-weight:800;">Direct</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Morphing SVG Curve -->
+                <!-- Dynamic Morphing Curve -->
                 <div style="background:#f8fafc; border-radius:var(--radius-md); padding:1.2rem; border:1px solid var(--border-subtle); display:flex; flex-direction:column; align-items:center;">
                     <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.65rem; width:100%; display:flex; justify-content:space-between;">
-                        <span>ELASTICITY YIELD CURVE</span>
+                        <span>YIELD CURVE</span>
                         <span class="badge badge-emerald" style="font-size:0.68rem;">Real-time</span>
                     </div>
                     <svg width="290" height="110" viewBox="0 0 290 110" style="overflow:visible;">
@@ -279,21 +212,19 @@
                                 <stop offset="100%" stop-color="#059669" stop-opacity="0.0"/>
                             </linearGradient>
                         </defs>
-                        <!-- Grid Lines -->
                         <line x1="10" y1="25" x2="280" y2="25" stroke="#e2e8f0" stroke-dasharray="3,3"/>
                         <line x1="10" y1="55" x2="280" y2="55" stroke="#e2e8f0" stroke-dasharray="3,3"/>
                         <line x1="10" y1="85" x2="280" y2="85" stroke="#e2e8f0" stroke-dasharray="3,3"/>
-                        <!-- Dynamic Morph Curve -->
                         <path id="simYieldCurve" d="M 10 90 Q 70 65, 140 50, 210 38, 280 25 L 280 110 L 10 110 Z" fill="url(#curveGradient)" stroke="#059669" stroke-width="2.5" style="transition:d 0.25s ease;"/>
                     </svg>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Sections Grid -->
+        <!-- 2-Column Content Grid -->
         <div style="display:grid; grid-template-columns: 2fr 1fr; gap:1.75rem;">
             
-            <!-- Items Ready for Flash Sale -->
+            <!-- Items Ready for Clearance -->
             <div class="card-glass">
                 <div class="card-header">
                     <div class="card-title">
@@ -312,12 +243,11 @@
                         </p>
                     </div>
 
-                    <div th:unless="${pending.isEmpty()}" class="proposals-grid">
-                        <div class="proposal-card" th:each="c : ${pending}">
+                    <div th:unless="${pending.isEmpty()}" class="proposals-grid" id="proposalsGrid">
+                        <div class="proposal-card" th:each="c : ${pending}" th:id="'card-' + ${c.id}">
                             <div>
                                 <div class="proposal-title" th:text="${c.displayName}">Product Name</div>
                                 <div class="proposal-sku number-font" th:text="${c.sku}">SKU-001</div>
-                                <div class="proposal-reasoning">Calculated to sell fast while keeping a healthy 15%+ profit.</div>
                             </div>
 
                             <div style="text-align:center;">
@@ -330,12 +260,14 @@
                                 <div class="number-font text-emerald" style="font-size:1.25rem; font-weight:800; margin-top:0.15rem;" th:text="'₹' + ${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</div>
                             </div>
 
-                            <div>
-                                <button class="btn btn-emerald btn-sm approve-trigger" type="button"
-                                        th:attr="data-id=${c.id}, data-name=${c.displayName}, data-offer=${#numbers.formatDecimal(c.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}, data-disc=${c.discountPct}">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                                    <span>Approve &amp; Get Link</span>
-                                </button>
+                            <div style="text-align:right;" th:id="'action-box-' + ${c.id}">
+                                <form th:action="@{/campaigns/{id}/approve(id=${c.id})}" method="post" class="inline-approve-form">
+                                    <button class="btn btn-emerald btn-sm direct-approve-btn" type="submit"
+                                            th:attr="data-id=${c.id}, data-name=${c.displayName}">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                        <span>Approve</span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -374,57 +306,12 @@
     </main>
 </div>
 
-<!-- Merchant Approval Slideover Drawer -->
-<div class="drawer-backdrop" id="modalBackdrop">
-    <div class="slideover-drawer">
-        <div class="drawer-header">
-            <div>
-                <div style="font-size:1.15rem; font-weight:800; color:var(--text-title);" id="modalProductName">Approve Flash Sale</div>
-                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:0.2rem;">Quick 1-click review before generating your payment link</div>
-            </div>
-            <button type="button" class="btn btn-outline btn-sm" id="modalCloseBtn" style="padding:0.35rem 0.65rem;">✕</button>
-        </div>
-
-        <div class="drawer-body">
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.25rem;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-                    <span style="font-size:0.75rem; text-transform:uppercase; font-weight:700; color:var(--text-muted);">Sale Price</span>
-                    <span class="badge badge-emerald" id="modalDiscountBadge">0% OFF</span>
-                </div>
-                <div style="font-size:2rem; font-weight:800; color:var(--color-emerald-dark);" class="number-font" id="modalOfferPrice">₹0.00</div>
-            </div>
-
-            <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:var(--radius-sm); padding:0.9rem 1rem; margin-bottom:1.25rem; font-size:0.82rem; color:#065f46; line-height:1.45;">
-                <div style="font-weight:700; margin-bottom:0.2rem; display:flex; align-items:center; gap:0.4rem;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>15% Profit Floor Guaranteed</span>
-                </div>
-                <div>This discounted price is verified to keep at least 15% profit above your product cost.</div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="merchantKeyInput">Merchant Security Key</label>
-                <input type="password" class="form-input" id="merchantKeyInput" value="mk_local_dev_key" placeholder="Enter key (e.g. mk_local_dev_key)">
-                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem;">Default local development key is pre-filled for convenience.</div>
-            </div>
-        </div>
-
-        <div class="drawer-footer">
-            <button type="button" class="btn btn-outline" id="modalCancelBtn" style="flex:1;">Cancel</button>
-            <button type="button" class="btn btn-emerald" id="modalApproveConfirmBtn" style="flex:1.5;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Confirm &amp; Get Link</span>
-            </button>
-        </div>
-    </div>
-</div>
-
 <!-- Universal Command Palette Modal (⌘K / Ctrl+K) -->
 <div class="command-palette-backdrop" id="commandPalette">
     <div class="command-palette-modal">
         <div class="command-input-row">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="command-input" id="commandInput" placeholder="Type a command or search action (e.g. scan, payout, sim)...">
+            <input type="text" class="command-input" id="commandInput" placeholder="Type an action (e.g. scan, campaigns, inventory)...">
             <button type="button" class="btn btn-outline btn-sm" id="commandCloseBtn" style="padding:0.2rem 0.5rem; font-size:0.75rem;">ESC</button>
         </div>
         <ul class="command-list">
@@ -438,37 +325,23 @@
             <li class="command-item" data-action="campaigns">
                 <div class="command-item-left">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    <span>View All Flash Sale Campaigns</span>
+                    <span>View Campaigns</span>
                 </div>
                 <span class="badge badge-indigo">Navigate</span>
             </li>
             <li class="command-item" data-action="inventory">
                 <div class="command-item-left">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-cyan)" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                    <span>Inspect Inventory Deadstock Matrix</span>
+                    <span>Inspect Inventory</span>
                 </div>
                 <span class="badge badge-indigo">Navigate</span>
-            </li>
-            <li class="command-item" data-action="simulate-webhook">
-                <div class="command-item-left">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <span>Launch Live Razorpay Webhook Simulator</span>
-                </div>
-                <span class="badge badge-amber">Developer Tool</span>
             </li>
             <li class="command-item" data-action="activity">
                 <div class="command-item-left">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                    <span>Examine Append-Only Audit Trail</span>
+                    <span>Audit Trail</span>
                 </div>
                 <span class="badge badge-indigo">Navigate</span>
-            </li>
-            <li class="command-item" data-action="toggle-sfx">
-                <div class="command-item-left">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
-                    <span>Toggle Synthesizer Audio SFX</span>
-                </div>
-                <span class="badge badge-emerald">Audio</span>
             </li>
         </ul>
     </div>
@@ -482,72 +355,93 @@
 
 <script>
 (() => {
-    let activeCampaignId = null;
-    const backdrop = document.getElementById('modalBackdrop');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
-    const modalCancelBtn = document.getElementById('modalCancelBtn');
-    const modalApproveConfirmBtn = document.getElementById('modalApproveConfirmBtn');
-    const keyInput = document.getElementById('merchantKeyInput');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
 
     function showToast(msg) {
+        if (!toast || !toastMessage) return;
         toastMessage.textContent = msg;
         toast.classList.add('active');
-        setTimeout(() => toast.classList.remove('active'), 3500);
+        setTimeout(() => toast.classList.remove('active'), 3200);
     }
 
-    document.querySelectorAll('.approve-trigger').forEach(btn => {
-        btn.addEventListener('click', () => {
+    // Direct 1-Click Inline Approval
+    document.querySelectorAll('.direct-approve-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const id = btn.getAttribute('data-id');
+            const name = btn.getAttribute('data-name');
+            const actionBox = document.getElementById('action-box-' + id);
+            
             if (window.sfx) window.sfx.click();
-            activeCampaignId = btn.getAttribute('data-id');
-            document.getElementById('modalProductName').textContent = btn.getAttribute('data-name');
-            document.getElementById('modalOfferPrice').textContent = '₹' + btn.getAttribute('data-offer');
-            document.getElementById('modalDiscountBadge').textContent = btn.getAttribute('data-disc') + '% OFF';
-            backdrop.classList.add('active');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="pulse-dot"></span><span>Approving...</span>`;
+
+            try {
+                const res = await fetch(`/api/v1/campaigns/${id}/approve`, {
+                    method: 'POST',
+                    headers: { 'X-Merchant-Key': 'mk_local_dev_key' }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    const rect = btn.getBoundingClientRect();
+                    if (window.triggerConfetti) {
+                        window.triggerConfetti(rect.left + rect.width / 2, rect.top);
+                    }
+                    if (window.sfx) window.sfx.success();
+
+                    // Swap button with generated Razorpay link & copy button
+                    if (actionBox) {
+                        actionBox.innerHTML = `
+                            <div style="display:flex; align-items:center; gap:0.5rem; justify-content:flex-end;">
+                                <span class="badge badge-emerald" style="font-size:0.75rem;">Live</span>
+                                <button type="button" class="btn btn-outline btn-sm copy-inline-btn" data-link="${data.razorpayLinkId}" style="padding:0.25rem 0.6rem; font-size:0.75rem;">
+                                    Copy Link
+                                </button>
+                            </div>
+                        `;
+                        const copyBtn = actionBox.querySelector('.copy-inline-btn');
+                        if (copyBtn) {
+                            copyBtn.addEventListener('click', () => {
+                                navigator.clipboard.writeText(data.razorpayLinkId).then(() => {
+                                    if (window.sfx) window.sfx.click();
+                                    showToast('Link ' + data.razorpayLinkId + ' copied to clipboard!');
+                                });
+                            });
+                        }
+                    }
+
+                    // Decrement pending count
+                    const countEl = document.getElementById('pendingCountDisplay');
+                    if (countEl) {
+                        const current = parseInt(countEl.textContent, 10);
+                        if (!isNaN(current) && current > 0) countEl.textContent = current - 1;
+                    }
+
+                    showToast(`Approved! Payment link ${data.razorpayLinkId} is active.`);
+                } else {
+                    // Fallback to submitting the form natively
+                    btn.closest('form').submit();
+                }
+            } catch (err) {
+                // If fetch fails, submit the form natively
+                btn.closest('form').submit();
+            }
         });
     });
 
-    function closeModal() {
-        backdrop.classList.remove('active');
-        activeCampaignId = null;
-        if (window.sfx) window.sfx.tick();
-    }
-
-    modalCloseBtn.addEventListener('click', closeModal);
-    modalCancelBtn.addEventListener('click', closeModal);
-
-    modalApproveConfirmBtn.addEventListener('click', async () => {
-        const key = keyInput.value.trim();
-        if (!key) {
-            if (window.sfx) window.sfx.warn();
-            alert('Please enter your merchant authentication key.');
-            keyInput.focus();
-            return;
-        }
-        modalApproveConfirmBtn.disabled = true;
-        try {
-            const res = await fetch(`/api/v1/campaigns/${activeCampaignId}/approve`, {
-                method: 'POST',
-                headers: { 'X-Merchant-Key': key }
-            });
-            const data = await res.json();
-            if (res.ok) {
-                closeModal();
-                if (window.triggerConfetti) window.triggerConfetti();
-                if (window.sfx) window.sfx.success();
-                showToast(`Campaign Authorized! Razorpay Link ${data.razorpayLinkId} launched.`);
-                setTimeout(() => location.reload(), 1400);
-            } else {
-                if (window.sfx) window.sfx.warn();
-                alert(`Authorization error: ${data.message || 'Key invalid'}`);
-                modalApproveConfirmBtn.disabled = false;
+    // Copy handlers for any pre-rendered copy buttons
+    document.querySelectorAll('.copy-inline-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const link = btn.getAttribute('data-link');
+            if (link) {
+                navigator.clipboard.writeText(link).then(() => {
+                    if (window.sfx) window.sfx.click();
+                    showToast('Link ' + link + ' copied to clipboard!');
+                });
             }
-        } catch (e) {
-            if (window.sfx) window.sfx.warn();
-            alert('Request failed: ' + e.message);
-            modalApproveConfirmBtn.disabled = false;
-        }
+        });
     });
 })();
 </script>

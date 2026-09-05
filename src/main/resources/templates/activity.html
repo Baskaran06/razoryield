@@ -78,7 +78,7 @@
                             <span class="badge badge-slate" th:text="${a.displayName}">Product Name</span>
                         </div>
                         <div style="margin-top:0.35rem; font-size:0.85rem; color:var(--text-body); line-height:1.6;">
-                            <div style="font-weight:600; color:var(--text-title);" th:text="${a.llmReasoning}">AI Rationale</div>
+                            <div style="font-weight:600; color:var(--text-title);" th:text="${a.llmReasoning}">Pricing Reason</div>
                             <div style="margin-top:0.25rem; font-size:0.8rem;" class="number-font">
                                 Offer price: <strong class="text-emerald" th:text="'₹' + ${#numbers.formatDecimal(a.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</strong> |
                                 Discount: <strong th:text="${a.discountPct} + '%'">0%</strong>

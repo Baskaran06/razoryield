@@ -11,3 +11,7 @@ target/
 
 .DS_Store
 Thumbs.db
+
+.agent/
+__pycache__/
+*.pyc

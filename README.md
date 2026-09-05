@@ -1,167 +1,207 @@
-# RazorYield
+# RazorYield — Autonomous Dead-Stock Liquidation Engine
 
-An autonomous margin-guarded flash sale orchestrator. It finds stagnant stock, asks a model what
-discount would move it, and then refuses to act on that answer until the discount has cleared a
-margin floor, a daily budget, and â€” above a threshold â€” a human being.
+> **Razorpay Hackathon Entry**  
+> An autonomous, margin-guarded flash sale orchestrator that unlocks trapped capital in aging merchant inventory through dynamic clearance pricing, strict deterministic profit guardrails, and automated Razorpay Payment Links.
 
-## The rule the whole system is built around
+---
 
-A model proposes. Deterministic code disposes.
+## ?? What is RazorYield?
 
-| Stage | Component | Model involved? |
-|-------|-----------|-----------------|
-| Propose a discount and explain it | `InventoryAnalyzerAiService` | **Yes** |
-| Enforce the margin floor | `DiscountPolicyValidator` | No |
-| Reserve against the daily budget | `DiscountPolicyValidator` | No |
-| Decide auto-dispatch vs human approval | `CampaignStateMachineService` | No |
-| Human approval | `CampaignApprovalController` | No |
-| Create the payment link | `RazorpayGatewayService` | No |
-| Confirm settlement | `RazorpayWebhookController` | No |
-| Record every step | `AuditService` | No |
+Retail and D2C merchants frequently have **thousands of rupees tied up in idle, stagnant inventory**. Clearing this stock manually is slow, while blunt blanket discounts often eat into profit margins or trigger price wars.
 
-The model returns an `LlmDiscountProposal` â€” a value object, never an action. Everything downstream
-treats it as untrusted input.
+**RazorYield solves this autonomously:**
+1. **Scans Inventory**: Detects stagnant stock that has been idle for 45+ days.
+2. **Dynamic Pricing**: Proposes dynamic clearance discounts modeled on item velocity and sales speed.
+3. **Enforces Hard Guardrails**: Automatically enforces a strict **15% minimum margin floor** and daily discount budget cap before any action can occur.
+4. **Direct Settlement via Razorpay**: Generates instant Razorpay Payment Links (`plink_xxx`) for 1-click customer checkout and direct merchant settlement.
 
-## Money
+---
 
-Every currency value is a `long` of paise, in Java and in PostgreSQL (`BIGINT`). No `float`,
-`double`, or `BigDecimal` touches a money calculation anywhere. The margin floor is computed with
-integer arithmetic that multiplies before dividing, so nothing is ever promoted to floating point:
+## ??? Core Rule: "AI Proposes. Deterministic Code Disposes."
 
-```java
-long floorPricePaise = (costPricePaise * (100L + globalMinMarginPct)) / 100L;
+In financial systems, machine learning models should **never** have direct authority over money, payouts, or price commitments. 
+
+RazorYield strictly isolates AI generation from financial execution:
+
+```
++--------------------------------+
+¦  AI Inventory Analyzer (LLM)   ¦ --> Generates Untrusted Proposal (Discount %, Reason)
++--------------------------------+
+               ¦
+               ?
++--------------------------------+
+¦   Deterministic Policy Gate    ¦ --> Hard Math Check: Floor Price = (Cost × 1.15)
++--------------------------------+
+               ¦
+               ?
++--------------------------------+
+¦     Atomic Redis Budget Gate   ¦ --> Atomic INCRBY: Daily cap of ?20,000
++--------------------------------+
+               ¦
+               ?
++--------------------------------+
+¦    Human / Auto-Dispatch Gate  ¦ --> <= 10% & <= ?500: Auto | Above: Merchant Approval
++--------------------------------+
+               ¦
+               ?
++--------------------------------+
+¦    Razorpay Gateway Service    ¦ --> Creates Live Payment Link (Direct Settlement)
++--------------------------------+
 ```
 
-`BigDecimal` appears only for `discount_pct`, which is a percentage rate, not an amount of money.
+| Pipeline Stage | Component | AI Model Involved? |
+| :--- | :--- | :---: |
+| Propose discount & explain rationale | `InventoryAnalyzerAiService` | **Yes (Untrusted input)** |
+| Enforce 15% margin floor | `DiscountPolicyValidator` | **No (Deterministic Math)** |
+| Reserve against daily budget | `DiscountPolicyValidator` | **No (Atomic Redis)** |
+| Determine auto-dispatch vs. approval | `CampaignStateMachineService` | **No (Deterministic Rules)** |
+| Merchant 1-click approval | `CampaignApprovalController` | **No (Human Gate)** |
+| Create Razorpay payment link | `RazorpayGatewayService` | **No (Razorpay API)** |
+| Confirm webhook settlement | `RazorpayWebhookController` | **No (HMAC SHA-256)** |
+| Append-only audit record | `AuditService` | **No (PostgreSQL)** |
 
-## The three gates
+---
 
-**Margin floor.** Default 15%, configurable via `orchestrator.policy.global-min-margin-pct`. An
-offer below `cost Ã— 1.15` is refused before Redis is even contacted.
+## ?? Zero-Float Money Safety
 
-**Daily budget.** â‚¹20,000 (2,000,000 paise) per day, held in Redis under
-`merchant:default:budget:yyyy-MM-dd` with a 24-hour TTL. The reservation is a single atomic
-`INCRBY`, checked afterwards and compensated with a negative `INCRBY` if it overshot. Reserving
-first and compensating second is what makes it safe under concurrency â€” two callers cannot both
-read a stale total and both conclude there is room.
+To prevent floating-point rounding errors and precision drift in financial transactions:
+* **100% Integer Arithmetic**: Every currency value is stored and calculated as an integer `long` of paise (1 Rupee = 100 Paise) in Java and PostgreSQL (`BIGINT`).
+* **No `float`, `double`, or `BigDecimal` for Money**: The margin floor is computed using integer multiplication before division:
+  ```java
+  long floorPricePaise = (costPricePaise * (100L + globalMinMarginPct)) / 100L;
+  ```
+* `BigDecimal` is strictly reserved for `discount_pct`, which is a mathematical rate, not an amount of money.
 
-**Human approval.** At or below 10.00% *and* at or below â‚¹500 of cash discount, a campaign
-auto-dispatches. Past either threshold it waits at `PENDING_MERCHANT_APPROVAL` for a merchant
-holding a valid `X-Merchant-Key`.
+---
 
-## The audit trail
+## ?? The 3 Guardrail Gates
 
-`campaign_audit_log` is append-only. A state change is a new row, never an edit â€” the entity
-deliberately exposes no setters. Settlement is recorded by inserting a `WEBHOOK_SETTLED` row, not by
-updating the proposal row.
+1. **Margin Floor Gate (15% Minimum)**:
+   * Configured via `orchestrator.policy.global-min-margin-pct=15`.
+   * Any discount that drops the offer price below `cost_price × 1.15` is immediately rejected (`REJECTED_MARGIN_BREACH`) before Redis or Razorpay are even contacted.
 
-Idempotency is enforced by the database, not by application code. `razorpay_payment_id` carries a
-unique constraint; a duplicate webhook delivery loses the insert race, raises
-`DataIntegrityViolationException`, and is acknowledged with `200 OK` without applying the side
-effect twice. A read-then-write check would let two concurrent deliveries both pass.
+2. **Daily Budget Cap Gate (?20,000 / day)**:
+   * Tracked atomically in Redis under `merchant:default:budget:yyyy-MM-dd` with a 24-hour TTL.
+   * Uses an atomic `INCRBY` reservation with automatic negative compensation if an offer overshoots the cap, preventing race conditions under high concurrency.
 
-## Merchant Command Console & UI Architecture
+3. **Human Oversight Gate**:
+   * **Auto-Dispatched**: Offers $\le 10.00\%$ discount **and** $\le ?500$ cash savings dispatch automatically.
+   * **Approval Required**: Any proposal exceeding either limit pauses at `PENDING_MERCHANT_APPROVAL` for 1-click merchant authorization holding a valid `X-Merchant-Key`.
 
-RazorYield provides a light, high-trust executive dashboard designed for merchant decision-makers:
+---
 
-* **Interactive Clearance Simulator:**
-  - Real-time yield curve morphing and live tracking dot as target discount is adjusted.
-  - 1-click discount presets (`10%`, `15%`, `20%`, `25%`, `35%`) with dynamic fill slider.
-  - Plain-English business metrics: **Sales Speed** (`items/day`), **Projected Cash**, **Profit Status** (`Safe` / `At Risk`), and **Payout** (`Direct`).
-* **Sovereign GuillochÃ© Canvas Engine:**
-  - 60 FPS dual-harmonic mathematical canvas ribbons inspired by Swiss watch dials and sovereign currency engraving.
-  - Interactive magnetic cursor deflection on a pure `#ffffff` background for zero eye-strain and maximum data clarity.
-* **1-Click Razorpay Approval:**
-  - Direct merchant approval triggers the Razorpay Payment Links API, updates inventory status, and generates copyable payment URLs instantly with zero page reloads.
-* **Guardrails HUD:**
-  - Real-time visual tracking of Margin Floor (`15%`), Daily Budget consumption, and Human Oversight triggers.
+## ??? Executive Merchant Console & UI Architecture
 
-## Running it locally, with nothing installed
+RazorYield features a modern, executive dashboard designed for merchant decision-makers:
 
-```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+* **Interactive Clearance Simulator**:
+  * Real-time dynamic SVG yield curve showing the balance between discount rate and clearance velocity.
+  * 1-click preset chips (`10%`, `15%`, `20%`, `25%`, `35%`) with dynamic slider track coloring.
+  * Real-time business metrics: **Sales Speed** (`items/day`), **Projected Cash**, **Profit Status** (`Safe` / `At Risk`), and **Payout Mode**.
+* **Sovereign Guilloché Canvas Engine**:
+  * 60 FPS mathematical dual-harmonic canvas ribbons inspired by Swiss watch dials and sovereign currency engraving.
+  * Interactive magnetic cursor deflection on a pure white `#ffffff` backdrop with zero text interference.
+* **Interactive Campaigns Workspace**:
+  * Real-time filter tabs with dynamic counts: **`All Campaigns`**, **`Active & Selling`**, **`Pending Approval`**, and **`Margin Guarded`**.
+  * Clickable Razorpay checkout links with 1-click clipboard copying.
+  * **Campaign Inspector Modal**: Clicking any campaign row opens a detailed breakdown of product metrics, AI reasoning, and direct Razorpay checkout links.
+* **Guardrails HUD**:
+  * Real-time visual monitoring of Margin Protection, Daily Budget utilization, and Active Clearance velocity.
+
+---
+
+## ?? Quickstart: Running Locally (Zero Dependencies)
+
+The application includes embedded PostgreSQL and embedded Redis configurations that run in-memory inside Maven — **you do NOT need to install Docker, PostgreSQL, or Redis to test this project**.
+
+### Prerequisites
+* **Java 21** installed (`java -version`)
+
+### One-Command Launch
+
+**On Windows (PowerShell / Command Prompt):**
+```powershell
+git clone https://github.com/Baskaran06/razoryield.git
+cd razoryield/razoryield
+.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-That is the whole setup. No PostgreSQL, no Redis, no Docker. Under the `local` profile,
-[`EmbeddedServersConfig`](src/main/java/com/razoryield/local/EmbeddedServersConfig.java) starts a
-**real PostgreSQL** and a **real Redis** as child processes â€” their binaries ship inside Maven
-artifacts â€” and stops them when the app exits. Flyway migrates the embedded database on the way up.
+**On macOS / Linux:**
+```bash
+git clone https://github.com/Baskaran06/razoryield.git
+cd razoryield/razoryield
+./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+```
 
-They are the genuine servers, not stand-ins, so the CHECK constraint, the unique constraint on
-`razorpay_payment_id` and the atomic `INCRBY` all behave exactly as they will in production.
+### Open the Application
+Once started, navigate to:
+?? **[http://localhost:8080/](http://localhost:8080/)**
 
-## Running it against real servers
+Flyway automatically seeds the database with initial inventory, customer cohorts, and sample campaigns.
 
-Requires **Java 21**, **Maven**, **PostgreSQL**, and **Redis**.
+---
+
+## ?? Running with Production Services (Docker)
+
+To run RazorYield against real external PostgreSQL and Redis instances:
 
 ```bash
+# 1. Start Postgres & Redis containers
 docker run -d --name razoryield-pg \
   -e POSTGRES_USER=razoryield -e POSTGRES_PASSWORD=razoryield -e POSTGRES_DB=razoryield \
   -p 5432:5432 postgres:17
 
 docker run -d --name razoryield-redis -p 6379:6379 redis:7
 
+# 2. Export environment variables
 export DB_URL=jdbc:postgresql://localhost:5432/razoryield
 export DB_USERNAME=razoryield
 export DB_PASSWORD=razoryield
-export MERCHANT_API_KEY=mk_test_change_me
-export RAZORPAY_KEY_ID=rzp_test_xxx
-export RAZORPAY_KEY_SECRET=xxx
-export RAZORPAY_WEBHOOK_SECRET=xxx
-export OPENAI_API_KEY=sk-xxx
+export MERCHANT_API_KEY=mk_test_secret_key
+export RAZORPAY_KEY_ID=rzp_test_your_id
+export RAZORPAY_KEY_SECRET=your_secret
+export RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 
-mvn spring-boot:run
+# 3. Launch with standard profile
+./mvnw spring-boot:run
 ```
 
-Flyway applies `V1__init_schema.sql` and `V2__seed_data.sql` on startup. Hibernate is set to
-`ddl-auto=validate`, so Flyway owns the schema and the entities are checked against it.
+---
 
-### Verifying the migrations
+## ?? Automated Tests
 
-```sql
--- The margin-breach fixture: floor price already exceeds base price, so no discount can ever clear.
-SELECT sku, cost_price_paise, base_price_paise,
-       (cost_price_paise * 115) / 100 AS floor_price_paise
-FROM products
-WHERE (cost_price_paise * 115) / 100 > base_price_paise;
---  SKU-LEGACY-PRINTER | 95000 | 100000 | 109250
-
--- All five cohort rows must match the targeting criteria.
-SELECT customer_id, phone_number, days_since_last_purchase, total_orders
-FROM customer_cohorts
-WHERE days_since_last_purchase >= 45 AND total_orders >= 2;
---  5 rows
-```
-
-## Tests
+The test suite contains **45 automated unit and integration tests** verifying policy math, database migrations, state transitions, and webhook idempotency without requiring Docker or live API keys:
 
 ```bash
-mvn test
+./mvnw test
 ```
 
-45 tests, no live calls to OpenAI or Razorpay, and **no Docker required** â€” `FlywayMigrationTest`
-starts a real PostgreSQL in-process and runs the actual migrations against it.
+| Test Suite | Coverage & Guarantees |
+| :--- | :--- |
+| `FlywayMigrationTest` | Verifies Flyway migrations, PostgreSQL `BIGINT` schema types, and CHECK constraints. |
+| `DiscountPolicyValidatorTest` | Validates 15% margin floor math, atomic Redis budget caps, and compensation rollbacks. |
+| `CampaignStateMachineServiceTest` | Verifies auto-dispatch transitions, human approval gates, and state invariants. |
+| `InventoryAnalyzerAiServiceTest` | Tests AI JSON parsing, fallback triggers, and malformed payload recovery. |
+| `RazorpayGatewayServiceTest` | Verifies Razorpay payment link payload structures and error wrapping. |
+| `RazorpayWebhookControllerTest` | Asserts HMAC SHA-256 signature verification and database idempotency against duplicate deliveries. |
+| `CampaignApprovalControllerTest` | Tests 1-click merchant approvals, unauthorized access checks, and state conflict handling. |
 
-| Suite | What it pins down |
-|-------|-------------------|
-| `FlywayMigrationTest` | Migrations apply; every `%_paise` column is `BIGINT`; the margin-breach fixture is genuinely unservable; the status CHECK rejects invented states; the unique constraint rejects a duplicate payment id but still allows many null ones |
-| `DiscountPolicyValidatorTest` | Margin breach short-circuits before Redis is touched; an over-budget reservation is rolled back; TTL is set only by the caller that created the key; the floor boundary is inclusive |
-| `CampaignStateMachineServiceTest` | Auto-dispatch, human-approval and rejection paths; a low percentage on a large cash amount still needs approval; budget depletion is recorded under its own verdict |
-| `InventoryAnalyzerAiServiceTest` | Valid JSON parses; malformed JSON, timeouts, empty responses, missing reasoning and non-positive prices all become `AiAnalysisFailedException` |
-| `RazorpayGatewayServiceTest` | The payload carries paise and the right `reference_id`; `RazorpayException` is wrapped so no SDK type escapes |
-| `CampaignApprovalControllerTest` | 200 on approval, 401 without a key, 409 from the wrong state with Razorpay never called, 404 unknown, 502 on gateway failure |
-| `RazorpayWebhookControllerTest` | Forged, missing and tampered signatures all rejected before any DB access; a duplicate insert is acknowledged; a first delivery appends a `PAID` row |
+---
 
-## API
+## ?? API Reference
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| `POST` | `/api/v1/campaigns/{id}/approve` | Merchant approval. Requires `X-Merchant-Key`. |
-| `POST` | `/api/v1/webhooks/razorpay` | Settlement events. Requires `X-Razorpay-Signature`. |
+| Method | Endpoint | Description | Headers |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/` | Executive Merchant Dashboard & Clearance Simulator | — |
+| `GET` | `/campaigns` | Interactive Clearance Campaigns Workspace | — |
+| `POST` | `/orchestrate` | Trigger inventory scan & campaign proposal cycle | — |
+| `POST` | `/api/v1/campaigns/{id}/approve` | Merchant 1-click campaign approval | `X-Merchant-Key: <key>` |
+| `POST` | `/api/v1/webhooks/razorpay` | Razorpay payment & settlement webhook | `X-Razorpay-Signature: <hmac>` |
+| `GET` | `/api/v1/campaigns` | JSON list of all clearance campaigns | — |
+| `GET` | `/api/v1/audit` | JSON append-only audit trail entries | — |
 
-## Known limitations
+---
 
-- Settlement depends entirely on Razorpay delivering the webhook. There is no CRON reconciliation
-  job to sweep up payments whose notification never arrived. A production deployment needs one.
-- The merchant gate is a single shared static key, not per-user authentication.
-- The daily budget is a single global bucket (`merchant:default`), not per-merchant.
+## ?? License
+
+Built for the **Razorpay Hackathon**. Licensed under the [MIT License](LICENSE).

@@ -101,7 +101,7 @@
                             <div style="font-weight:700; color:var(--text-title);" th:text="${p.displayName}">Product Name</div>
                             <div class="number-font" style="font-size:0.78rem; color:var(--text-muted);" th:text="${p.sku}">SKU</div>
                         </td>
-                        <td style="text-align:right;" class="number-font text-emerald" style="font-weight:700;" th:text="'₹' + ${#numbers.formatDecimal(p.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</td>
+                        <td class="number-font text-emerald" style="text-align:right; font-weight:700;" th:text="'₹' + ${#numbers.formatDecimal(p.offerPricePaise / 100.0, 1, 'COMMA', 2, 'POINT')}">₹0.00</td>
                         <td class="number-font text-cyan" style="font-size:0.8rem; font-weight:600;" th:text="${p.razorpayPaymentId}">pay_xxx</td>
                         <td class="number-font" style="font-size:0.8rem;" th:text="${p.razorpayLinkId}">plink_xxx</td>
                         <td>

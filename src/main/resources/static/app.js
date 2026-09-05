@@ -1,14 +1,14 @@
 /**
- * RAZORYIELD — SENIOR FRONTEND ORCHESTRATION ENGINE
- * Core Capabilities:
- * - 3D Ambient WebGL/Canvas Particle Constellation with physics-based cursor repulsion
- * - Native Web Audio API Sound Synthesizer (Zero-dependency audio haptics)
- * - Dynamic Card Spotlight Border Tracker (Linear/Vercel aesthetic)
- * - Universal Command Palette (⌘K / Ctrl+K)
+ * RAZORYIELD — EXECUTIVE LUXURY LIGHT ENGINE
+ * Capabilities:
+ * - 3D Silky Fluid Ribbon & Harmonic Wave Canvas (Pearlescent Apple/Stripe Light aesthetic)
+ * - Mouse Spring Displacement & Interactive Wave Ripples
+ * - Native Web Audio API Synthesizer (Zero-dependency acoustic haptics)
  * - Real-Time AI Yield Curve & Clearance Simulator with interactive SVG morphing
- * - Particle Burst / Confetti Celebration Engine
+ * - Universal Command Palette (⌘K / Ctrl+K)
+ * - Confetti Celebration Burst Engine
  * - Smooth Number Interpolation Counters
- * - Interactive Razorpay Webhook Simulation Pipeline
+ * - Magnetic 3D Tilt Hover Effects
  */
 
 (() => {
@@ -50,14 +50,14 @@
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(1400, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.03);
-                gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.03);
+                osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.025);
+                gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.025);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.03);
+                osc.stop(this.ctx.currentTime + 0.025);
             } catch (e) {}
         }
 
@@ -68,9 +68,9 @@
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(900, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(450, this.ctx.currentTime + 0.06);
-                gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(520, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(260, this.ctx.currentTime + 0.06);
+                gain.gain.setValueAtTime(0.035, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.06);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
@@ -79,72 +79,49 @@
             } catch (e) {}
         }
 
-        radar() {
-            if (!this.enabled) return;
-            try {
-                this.initContext();
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, now);
-                osc.frequency.exponentialRampToValueAtTime(1800, now + 0.4);
-                gain.gain.setValueAtTime(0.05, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.45);
-            } catch (e) {}
-        }
-
         success() {
             if (!this.enabled) return;
             try {
                 this.initContext();
-                const now = this.ctx.currentTime;
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // C Major Chord
-                notes.forEach((freq, idx) => {
+                const chords = [523.25, 659.25, 783.99, 1046.50]; // C5 major arpeggio
+                chords.forEach((freq, idx) => {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.value = freq;
-                    const startTime = now + idx * 0.06;
-                    gain.gain.setValueAtTime(0.035, startTime);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.25);
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.05);
+                    gain.gain.setValueAtTime(0.04, this.ctx.currentTime + idx * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + idx * 0.05 + 0.35);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start(startTime);
-                    osc.stop(startTime + 0.25);
+                    osc.start(this.ctx.currentTime + idx * 0.05);
+                    osc.stop(this.ctx.currentTime + idx * 0.05 + 0.35);
                 });
             } catch (e) {}
         }
 
-        warn() {
+        radar() {
             if (!this.enabled) return;
             try {
                 this.initContext();
-                const now = this.ctx.currentTime;
                 const osc = this.ctx.createOscillator();
                 const gain = this.ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(320, now);
-                osc.frequency.setValueAtTime(240, now + 0.08);
-                gain.gain.setValueAtTime(0.03, now);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(950, this.ctx.currentTime + 0.18);
+                gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.22);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.2);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.22);
             } catch (e) {}
         }
     }
 
     const sfx = new SoundEngine();
-    window.sfx = sfx;
 
     // =========================================================================
-    // 2. 3D AMBIENT SPATIAL PARTICLE CONSTELLATION (HTML5 CANVAS)
+    // 2. LUXURY SILKY FLUID RIBBON & MESH CANVAS (Apple/Stripe Light Mode)
     // =========================================================================
     function initAmbientCanvas() {
         const canvas = document.getElementById('ambientCanvas');
@@ -154,10 +131,8 @@
 
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
-        let particles = [];
-        const particleCount = Math.min(Math.floor((width * height) / 18000), 75);
 
-        const mouse = { x: -1000, y: -1000, radius: 140 };
+        const mouse = { x: width * 0.5, y: height * 0.3, targetX: width * 0.5, targetY: height * 0.3, active: false };
 
         window.addEventListener('resize', () => {
             width = canvas.width = window.innerWidth;
@@ -165,87 +140,91 @@
         });
 
         window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
+            mouse.active = true;
+        }, { passive: true });
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
+        // Ribbons definition: harmonic undulating smooth curves
+        const ribbons = [
+            { baseY: height * 0.22, amplitude: 55, speed: 0.008, freq: 0.0016, color: 'rgba(5, 150, 105, 0.06)', width: 3 },
+            { baseY: height * 0.35, amplitude: 70, speed: 0.006, freq: 0.0012, color: 'rgba(79, 70, 229, 0.05)', width: 2.5 },
+            { baseY: height * 0.52, amplitude: 60, speed: 0.007, freq: 0.0014, color: 'rgba(6, 182, 212, 0.04)', width: 2 },
+            { baseY: height * 0.70, amplitude: 85, speed: 0.005, freq: 0.0010, color: 'rgba(16, 185, 129, 0.05)', width: 3 },
+            { baseY: height * 0.88, amplitude: 50, speed: 0.009, freq: 0.0018, color: 'rgba(99, 102, 241, 0.04)', width: 2 }
+        ];
 
-            reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.z = Math.random() * 0.8 + 0.2; // 3D depth scale
-                this.vx = (Math.random() - 0.5) * 0.45 * this.z;
-                this.vy = (Math.random() - 0.5) * 0.45 * this.z;
-                this.radius = (Math.random() * 1.8 + 0.8) * this.z;
-                this.baseAlpha = Math.random() * 0.35 + 0.15;
-                this.alpha = this.baseAlpha;
-                this.color = Math.random() > 0.65 ? '#10b981' : (Math.random() > 0.4 ? '#6366f1' : '#38bdf8');
-            }
+        // Soft floating ambient glow spheres
+        const spheres = [
+            { x: width * 0.2, y: height * 0.25, r: 240, vx: 0.3, vy: 0.2, color: 'rgba(16, 185, 129, 0.04)' },
+            { x: width * 0.8, y: height * 0.35, r: 300, vx: -0.25, vy: 0.2, color: 'rgba(79, 70, 229, 0.035)' },
+            { x: width * 0.5, y: height * 0.75, r: 280, vx: 0.2, vy: -0.25, color: 'rgba(6, 182, 212, 0.035)' }
+        ];
 
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
-
-                // Mouse interaction physics
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < mouse.radius) {
-                    const force = (1 - dist / mouse.radius) * 1.5;
-                    this.x -= (dx / dist) * force;
-                    this.y -= (dy / dist) * force;
-                    this.alpha = Math.min(this.baseAlpha * 2.2, 0.9);
-                } else {
-                    this.alpha += (this.baseAlpha - this.alpha) * 0.05;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
+        let tick = 0;
 
         function render() {
+            tick++;
+            // Smooth mouse interpolation (spring dampening)
+            mouse.x += (mouse.targetX - mouse.x) * 0.06;
+            mouse.y += (mouse.targetY - mouse.y) * 0.06;
+
             ctx.clearRect(0, 0, width, height);
 
-            // Connect nearby particles with subtle glowing neural lines
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
+            // 1. Draw floating soft aura spheres
+            spheres.forEach(s => {
+                s.x += s.vx;
+                s.y += s.vy;
+                if (s.x - s.r < 0 || s.x + s.r > width) s.vx *= -1;
+                if (s.y - s.r < 0 || s.y + s.r > height) s.vy *= -1;
 
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
+                const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
+                grad.addColorStop(0, s.color);
+                grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // 2. Draw silky harmonic ribbons with mouse ripple physics
+            ribbons.forEach((r, idx) => {
+                ctx.beginPath();
+                ctx.lineWidth = r.width;
+                ctx.strokeStyle = r.color;
+
+                const step = 20;
+                let started = false;
+
+                for (let x = 0; x <= width + step; x += step) {
+                    // Base harmonic sine waves
+                    const timeOffset = tick * r.speed + idx * 2.0;
+                    let wave = Math.sin(x * r.freq + timeOffset) * r.amplitude
+                             + Math.cos(x * r.freq * 0.5 + timeOffset * 0.8) * (r.amplitude * 0.5);
+
+                    // Interactive mouse displacement
+                    const dx = x - mouse.x;
+                    const dy = (r.baseY + wave) - mouse.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
+                    const maxDist = 280;
 
-                    if (dist < 110) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = '#6366f1';
-                        ctx.globalAlpha = (1 - dist / 110) * 0.15 * particles[i].z;
-                        ctx.lineWidth = 0.75 * particles[i].z;
-                        ctx.stroke();
+                    if (dist < maxDist) {
+                        const factor = (1 - dist / maxDist);
+                        wave += Math.sin(factor * Math.PI) * 45 * (dy > 0 ? 1 : -1);
+                    }
+
+                    const y = r.baseY + wave;
+
+                    if (!started) {
+                        ctx.moveTo(x, y);
+                        started = true;
+                    } else {
+                        ctx.lineTo(x, y);
                     }
                 }
-            }
+                ctx.stroke();
+            });
+
             requestAnimationFrame(render);
         }
 
@@ -253,123 +232,35 @@
     }
 
     // =========================================================================
-    // 3. CARD SPOTLIGHT MOUSE-TRACKER (LINEAR / VERCEL RADIAL GLOW)
-    // =========================================================================
-    function initCardSpotlights() {
-        const cards = document.querySelectorAll('.card-glass, .stat-card, .proposal-card, .interactive-card');
-        window.addEventListener('mousemove', (e) => {
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
-            });
-        });
-    }
-
-    // =========================================================================
-    // 4. CONFETTI CELEBRATION BURST ENGINE
-    // =========================================================================
-    function triggerConfetti(originX, originY) {
-        const canvas = document.createElement('canvas');
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.left = '0';
-        canvas.style.width = '100vw';
-        canvas.style.height = '100vh';
-        canvas.style.pointerEvents = 'none';
-        canvas.style.zIndex = '9999';
-        document.body.appendChild(canvas);
-
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const colors = ['#10b981', '#6366f1', '#38bdf8', '#f59e0b', '#ec4899', '#ffffff'];
-        const particles = [];
-        const count = 70;
-        const startX = originX || canvas.width / 2;
-        const startY = originY || canvas.height / 2;
-
-        for (let i = 0; i < count; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 8 + 3;
-            particles.push({
-                x: startX,
-                y: startY,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed - 3,
-                gravity: 0.25,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                size: Math.random() * 6 + 3,
-                rotation: Math.random() * 360,
-                vRot: (Math.random() - 0.5) * 12,
-                opacity: 1
-            });
-        }
-
-        let animationFrame;
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            let alive = 0;
-
-            particles.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                p.vy += p.gravity;
-                p.rotation += p.vRot;
-                p.opacity -= 0.015;
-
-                if (p.opacity > 0) {
-                    alive++;
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate((p.rotation * Math.PI) / 180);
-                    ctx.globalAlpha = Math.max(0, p.opacity);
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                    ctx.restore();
-                }
-            });
-
-            if (alive > 0) {
-                animationFrame = requestAnimationFrame(animate);
-            } else {
-                cancelAnimationFrame(animationFrame);
-                canvas.remove();
-            }
-        }
-        animate();
-    }
-    window.triggerConfetti = triggerConfetti;
-
-    // =========================================================================
-    // 5. NUMBER COUNTER ANIMATION INTERPOLATION
+    // 3. SMOOTH NUMBER INTERPOLATION COUNTER
     // =========================================================================
     function animateCounters() {
-        const counters = document.querySelectorAll('.animate-number');
+        const counters = document.querySelectorAll('.stat-value, [data-counter]');
         counters.forEach(counter => {
-            const target = parseFloat(counter.getAttribute('data-target') || '0');
-            const prefix = counter.getAttribute('data-prefix') || '';
-            const suffix = counter.getAttribute('data-suffix') || '';
-            const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
-            const duration = 1200;
+            const rawText = counter.textContent.trim();
+            const numericMatch = rawText.match(/[\d,.]+/);
+            if (!numericMatch) return;
+
+            const targetVal = parseFloat(numericMatch[0].replace(/,/g, ''));
+            if (isNaN(targetVal) || targetVal === 0) return;
+
+            const isRupee = rawText.startsWith('₹');
+            const hasDecimals = rawText.includes('.');
             const startTime = performance.now();
+            const duration = 1400; // ms
 
-            function update(currentTime) {
-                const elapsed = currentTime - startTime;
+            function update(now) {
+                const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Ease out expo
+                // EaseOutExpo
                 const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-                const currentVal = target * ease;
+                const current = targetVal * ease;
 
-                const formatted = currentVal.toLocaleString('en-IN', {
-                    minimumFractionDigits: decimals,
-                    maximumFractionDigits: decimals
-                });
+                let formatted = hasDecimals
+                    ? current.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                    : Math.round(current).toLocaleString('en-IN');
 
-                counter.textContent = `${prefix}${formatted}${suffix}`;
+                counter.textContent = (isRupee ? '₹' : '') + formatted;
 
                 if (progress < 1) {
                     requestAnimationFrame(update);
@@ -380,188 +271,212 @@
     }
 
     // =========================================================================
-    // 6. REAL-TIME AI YIELD & CLEARANCE SIMULATOR WIDGET
+    // 4. INTERACTIVE REAL-TIME AI YIELD SIMULATOR
     // =========================================================================
     function initYieldSimulator() {
-        const slider = document.getElementById('simDiscountSlider');
-        if (!slider) return;
+        const slider = document.getElementById('yieldDiscountSlider');
+        const discountDisplay = document.getElementById('simDiscountPct');
+        const curvePath = document.getElementById('simCurvePath');
+        const velEl = document.getElementById('simVelocityVal');
+        const revEl = document.getElementById('simRevenueVal');
+        const marginEl = document.getElementById('simMarginVal');
+        const statusEl = document.getElementById('simStatusBadge');
 
-        const discountVal = document.getElementById('simDiscountVal');
-        const velocityVal = document.getElementById('simVelocityVal');
-        const revenueVal = document.getElementById('simRevenueVal');
-        const marginHealthVal = document.getElementById('simMarginHealthVal');
-        const pathCurve = document.getElementById('simYieldCurve');
+        if (!slider || !discountDisplay) return;
 
         function recalculate() {
-            const disc = parseInt(slider.value, 10);
-            if (discountVal) discountVal.textContent = `${disc}%`;
+            const discount = parseInt(slider.value, 10);
+            discountDisplay.textContent = discount + '%';
 
-            // Yield math models
-            const baseInventoryValue = 185000; // Simulated idle inventory in INR
-            const elasticityFactor = 1 + (disc / 100) * 2.2;
-            const clearanceRate = Math.min(Math.round(24 * elasticityFactor), 96);
-            const estRevenue = Math.round(baseInventoryValue * (1 - disc / 100) * (clearanceRate / 100));
+            // Clearance formula modeling
+            const baseVelocity = 14;
+            const velocityMultiplier = Math.pow(1 + (discount / 100), 2.4);
+            const predictedVelocity = Math.round(baseVelocity * velocityMultiplier);
 
-            // Margin floor health check (Breach happens if discount > 35%)
-            let marginStatus = "Optimal (>22% ROI)";
-            let marginClass = "text-emerald";
-            if (disc > 25 && disc <= 35) {
-                marginStatus = "Guarded (15-20% Floor)";
-                marginClass = "text-amber";
-            } else if (disc > 35) {
-                marginStatus = "Floor Breached (HITL Block)";
-                marginClass = "text-rose";
+            const baseGross = 185000;
+            const discountedGross = baseGross * (1 - (discount / 100));
+            const recoveredRevenue = Math.round(discountedGross * (predictedVelocity / baseVelocity) * 0.45);
+
+            const baseMargin = 38.0;
+            const simulatedMargin = (baseMargin - (discount * 0.82)).toFixed(1);
+
+            if (velEl) velEl.textContent = predictedVelocity + ' units/day';
+            if (revEl) revEl.textContent = '₹' + recoveredRevenue.toLocaleString('en-IN');
+            if (marginEl) {
+                marginEl.textContent = simulatedMargin + '%';
+                if (parseFloat(simulatedMargin) < 15.0) {
+                    marginEl.style.color = 'var(--color-rose-dark)';
+                    if (statusEl) {
+                        statusEl.className = 'badge badge-rose';
+                        statusEl.textContent = 'Guardrail Breached (<15%)';
+                    }
+                } else {
+                    marginEl.style.color = 'var(--color-emerald-dark)';
+                    if (statusEl) {
+                        statusEl.className = 'badge badge-emerald';
+                        statusEl.textContent = 'Guardrail Compliant (Safe)';
+                    }
+                }
             }
 
-            if (velocityVal) velocityVal.textContent = `${clearanceRate}% in 48h`;
-            if (revenueVal) revenueVal.textContent = `₹${estRevenue.toLocaleString('en-IN')}`;
-            if (marginHealthVal) {
-                marginHealthVal.textContent = marginStatus;
-                marginHealthVal.className = `number-font ${marginClass}`;
-            }
-
-            // Morph SVG curve
-            if (pathCurve) {
-                const heightOffset = (disc / 50) * 45;
-                const d = `M 10 90 Q 70 ${80 - heightOffset * 0.7}, 140 ${70 - heightOffset}, 210 ${60 - heightOffset * 1.1}, 280 ${50 - heightOffset * 1.2} L 280 110 L 10 110 Z`;
-                pathCurve.setAttribute('d', d);
+            // Morph SVG curve dynamically
+            if (curvePath) {
+                const norm = discount / 50; // 0 to 1
+                const cpY1 = 120 - (norm * 75);
+                const cpY2 = 80 - (norm * 55);
+                const endY = 40 + (norm * 45);
+                curvePath.setAttribute('d', `M 20 140 C 140 ${cpY1}, 280 ${cpY2}, 460 ${endY}`);
             }
         }
 
         slider.addEventListener('input', () => {
-            sfx.tick();
             recalculate();
+            sfx.tick();
         });
 
         recalculate();
     }
 
     // =========================================================================
-    // 7. UNIVERSAL COMMAND PALETTE (⌘K / CTRL+K)
+    // 5. UNIVERSAL COMMAND PALETTE (⌘K / Ctrl+K)
     // =========================================================================
     function initCommandPalette() {
-        const palette = document.getElementById('commandPalette');
-        const searchInput = document.getElementById('commandInput');
-        const closeBtn = document.getElementById('commandCloseBtn');
-        const triggerBtns = document.querySelectorAll('.command-palette-trigger');
+        const triggers = document.querySelectorAll('.command-palette-trigger');
+        let backdrop = document.querySelector('.cmd-palette-backdrop');
 
-        if (!palette || !searchInput) return;
+        if (!backdrop) {
+            backdrop = document.createElement('div');
+            backdrop.className = 'cmd-palette-backdrop';
+            backdrop.innerHTML = `
+                <div class="cmd-palette-modal" role="dialog" aria-modal="true">
+                    <div class="cmd-input-wrapper">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" class="cmd-input" placeholder="Search commands, navigate routes, or filter..." autofocus>
+                        <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); background:#f1f5f9; padding:0.2rem 0.45rem; border-radius:4px;">ESC</span>
+                    </div>
+                    <ul class="cmd-list">
+                        <li class="cmd-item" data-action="route-dash"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</span> <span class="badge badge-slate">Go</span></li>
+                        <li class="cmd-item" data-action="route-camp"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Campaigns</span> <span class="badge badge-slate">Go</span></li>
+                        <li class="cmd-item" data-action="route-inv"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Inventory Matrix</span> <span class="badge badge-slate">Go</span></li>
+                        <li class="cmd-item" data-action="route-pay"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Settlement Ledger</span> <span class="badge badge-slate">Go</span></li>
+                        <li class="cmd-item" data-action="scan"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Run Clearance Scan</span> <span class="badge badge-emerald">Action</span></li>
+                    </ul>
+                </div>
+            `;
+            document.body.appendChild(backdrop);
+        }
+
+        const input = backdrop.querySelector('.cmd-input');
+        const items = backdrop.querySelectorAll('.cmd-item');
 
         function openPalette() {
-            palette.classList.add('active');
-            searchInput.value = '';
-            filterCommands('');
-            searchInput.focus();
+            backdrop.classList.add('open');
+            input.value = '';
+            input.focus();
             sfx.click();
         }
 
         function closePalette() {
-            palette.classList.remove('active');
-            sfx.tick();
+            backdrop.classList.remove('open');
         }
 
-        triggerBtns.forEach(btn => btn.addEventListener('click', openPalette));
-        if (closeBtn) closeBtn.addEventListener('click', closePalette);
+        triggers.forEach(t => t.addEventListener('click', openPalette));
+
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closePalette();
+        });
 
         window.addEventListener('keydown', (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
-                if (palette.classList.contains('active')) {
-                    closePalette();
-                } else {
-                    openPalette();
-                }
-            } else if (e.key === 'Escape' && palette.classList.contains('active')) {
+                backdrop.classList.contains('open') ? closePalette() : openPalette();
+            } else if (e.key === 'Escape' && backdrop.classList.contains('open')) {
                 closePalette();
             }
         });
 
-        palette.addEventListener('click', (e) => {
-            if (e.target === palette) closePalette();
-        });
-
-        function filterCommands(query) {
-            const items = palette.querySelectorAll('.command-item');
-            const q = query.toLowerCase().trim();
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(q) ? 'flex' : 'none';
-            });
-        }
-
-        searchInput.addEventListener('input', (e) => {
-            filterCommands(e.target.value);
-        });
-
-        palette.querySelectorAll('.command-item').forEach(item => {
+        items.forEach(item => {
             item.addEventListener('click', () => {
                 const action = item.getAttribute('data-action');
                 closePalette();
-                executeAction(action);
+                if (action === 'route-dash') window.location.href = '/';
+                else if (action === 'route-camp') window.location.href = '/campaigns';
+                else if (action === 'route-inv') window.location.href = '/inventory';
+                else if (action === 'route-pay') window.location.href = '/payments';
+                else if (action === 'scan') {
+                    const scanForm = document.getElementById('orchestrateForm');
+                    if (scanForm) scanForm.submit();
+                    else window.location.href = '/';
+                }
             });
         });
+    }
 
-        function executeAction(action) {
-            sfx.click();
-            switch (action) {
-                case 'scan':
-                    const scanBtn = document.getElementById('scanBtn');
-                    if (scanBtn) scanBtn.click();
-                    break;
-                case 'dashboard':
-                    window.location.href = '/';
-                    break;
-                case 'campaigns':
-                    window.location.href = '/campaigns';
-                    break;
-                case 'inventory':
-                    window.location.href = '/inventory';
-                    break;
-                case 'payouts':
-                    window.location.href = '/payments';
-                    break;
-                case 'activity':
-                    window.location.href = '/activity';
-                    break;
-                case 'settings':
-                    window.location.href = '/settings';
-                    break;
-                case 'toggle-sfx':
-                    const sfxBtn = document.getElementById('sfxToggleBtn');
-                    if (sfxBtn) sfxBtn.click();
-                    break;
-                case 'simulate-webhook':
-                    window.location.href = '/payments#webhookSimulator';
-                    break;
+    // =========================================================================
+    // 6. CONFETTI CELEBRATION BURST ENGINE
+    // =========================================================================
+    function triggerConfetti(originX, originY) {
+        const count = 36;
+        const colors = ['#059669', '#10b981', '#4f46e5', '#6366f1', '#0891b2', '#f59e0b'];
+        for (let i = 0; i < count; i++) {
+            const piece = document.createElement('div');
+            piece.style.position = 'fixed';
+            piece.style.left = originX + 'px';
+            piece.style.top = originY + 'px';
+            piece.style.width = (Math.random() * 8 + 5) + 'px';
+            piece.style.height = (Math.random() * 8 + 5) + 'px';
+            piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            piece.style.pointerEvents = 'none';
+            piece.style.zIndex = '999999';
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 180 + 120;
+            const vx = Math.cos(angle) * velocity;
+            const vy = Math.sin(angle) * velocity - 160;
+
+            document.body.appendChild(piece);
+
+            const startTime = performance.now();
+            function animatePiece(now) {
+                const t = (now - startTime) / 1000;
+                const curX = originX + vx * t;
+                const curY = originY + vy * t + 0.5 * 500 * t * t;
+                const opacity = Math.max(1 - t / 1.2, 0);
+
+                piece.style.transform = `translate(${curX - originX}px, ${curY - originY}px) rotate(${t * 360}deg)`;
+                piece.style.opacity = opacity;
+
+                if (t < 1.2) {
+                    requestAnimationFrame(animatePiece);
+                } else {
+                    piece.remove();
+                }
             }
+            requestAnimationFrame(animatePiece);
         }
     }
 
     // =========================================================================
-    // 8. AUDIO SFX TOGGLE BUTTON
+    // 7. SFX TOGGLE BUTTON
     // =========================================================================
     function initSfxToggle() {
         const btn = document.getElementById('sfxToggleBtn');
         if (!btn) return;
-
-        function updateUI() {
-            const state = sfx.enabled;
-            btn.innerHTML = state 
+        const updateUI = () => {
+            btn.innerHTML = sfx.enabled
                 ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>SFX: ON</span>`
-                : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg><span>SFX: MUTED</span>`;
-            btn.className = `btn btn-sm ${state ? 'btn-emerald-subtle' : 'btn-outline'}`;
-        }
-
+                : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg><span>SFX: OFF</span>`;
+        };
         btn.addEventListener('click', () => {
             sfx.toggle();
             updateUI();
         });
-
         updateUI();
     }
 
     // =========================================================================
-    // 9. SCAN BUTTON RADAR EFFECT
+    // 8. SCAN BUTTON RADAR EFFECT
     // =========================================================================
     function initScanEffects() {
         const form = document.getElementById('orchestrateForm');
@@ -570,66 +485,16 @@
 
         form.addEventListener('submit', () => {
             sfx.radar();
-            btn.classList.add('scanning-active');
-            btn.innerHTML = `
-                <span class="spinner-dot"></span>
-                <span>Agent Scanning Idle Stock...</span>
-            `;
+            btn.disabled = true;
+            btn.innerHTML = `<span class="pulse-dot"></span><span>Agent Scanning Stock...</span>`;
         });
     }
 
     // =========================================================================
-    // 10. ANIMMASTER-QUALITY MOTION ENGINE (GSAP-equivalent, zero-dependency)
+    // 9. MAGNETIC 3D TILT ON HOVER
     // =========================================================================
-
-    // --- 10a. Spring Physics Easing Function ---
-    function springEase(t, damping = 0.7, frequency = 4) {
-        return 1 - Math.exp(-damping * t * 10) * Math.cos(frequency * t * Math.PI * 2);
-    }
-
-    // --- 10b. IntersectionObserver Scroll Reveal System ---
-    function initScrollRevealSystem() {
-        const revealElements = document.querySelectorAll(
-            '.anim-reveal, .card-glass, .stat-card, .page-header, .hero-grid, .filter-tabs, .timeline-node, .form-group'
-        );
-        if (!revealElements.length) return;
-
-        // Pre-set all elements to hidden state via inline styles (no CSS class needed)
-        revealElements.forEach((el, i) => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(32px) scale(0.97)';
-            el.style.transition = 'none'; // Remove transition until observed
-            el.dataset.revealIndex = i;
-        });
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-
-                const el = entry.target;
-                const idx = parseInt(el.dataset.revealIndex || '0', 10);
-                const staggerDelay = Math.min(idx * 65, 400); // Stagger up to 400ms
-
-                setTimeout(() => {
-                    el.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0) scale(1)';
-                    sfx.tick();
-                }, staggerDelay);
-
-                observer.unobserve(el);
-            });
-        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-        // Small delay to ensure styles are applied before observing
-        requestAnimationFrame(() => {
-            revealElements.forEach(el => observer.observe(el));
-        });
-    }
-
-    // --- 10c. Magnetic 3D Tilt Hover Effect (Awwwards-style) ---
     function initMagneticTilt() {
-        const cards = document.querySelectorAll('.card-glass, .stat-card');
+        const cards = document.querySelectorAll('.card-glass, .stat-card, .process-step-card');
         cards.forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -637,253 +502,51 @@
                 const y = e.clientY - rect.top;
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -2.5;
+                const rotateY = ((x - centerX) / centerX) * 2.5;
 
-                const rotateX = ((y - centerY) / centerY) * -3; // Max ±3 degrees
-                const rotateY = ((x - centerX) / centerX) * 3;
-
-                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.01)`;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
                 card.style.transition = 'transform 0.1s ease-out';
             });
 
             card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
-                card.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+                card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0)';
+                card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
             });
         });
-    }
-
-    // --- 10d. Split Text Character Reveal Animation ---
-    function initTextSplitAnimation() {
-        const titles = document.querySelectorAll('.page-title');
-        titles.forEach(title => {
-            const text = title.textContent;
-            title.textContent = '';
-            title.style.opacity = '1';
-
-            [...text].forEach((char, i) => {
-                const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.cssText = `
-                    display: inline-block;
-                    opacity: 0;
-                    transform: translateY(20px) rotateX(-45deg);
-                    animation: charReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${i * 25}ms forwards;
-                `;
-                title.appendChild(span);
-            });
-        });
-
-        // Inject keyframes if not already present
-        if (!document.getElementById('charRevealKeyframes')) {
-            const style = document.createElement('style');
-            style.id = 'charRevealKeyframes';
-            style.textContent = `
-                @keyframes charReveal {
-                    to {
-                        opacity: 1;
-                        transform: translateY(0) rotateX(0deg);
-                    }
-                }
-                @keyframes slideInFromRight {
-                    from {
-                        opacity: 0;
-                        transform: translateX(30px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-                @keyframes pulseGlow {
-                    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.15); }
-                    50% { box-shadow: 0 0 20px 6px rgba(16, 185, 129, 0.08); }
-                }
-                @keyframes numberSlotMachine {
-                    0% { transform: translateY(-100%); opacity: 0; }
-                    60% { transform: translateY(5%); }
-                    80% { transform: translateY(-2%); }
-                    100% { transform: translateY(0); opacity: 1; }
-                }
-                @keyframes fadeInScale {
-                    from { opacity: 0; transform: scale(0.85); }
-                    to { opacity: 1; transform: scale(1); }
-                }
-                @keyframes shimmer {
-                    0% { background-position: -200% center; }
-                    100% { background-position: 200% center; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-    }
-
-    // --- 10e. Navbar Scroll Shrink Effect ---
-    function initNavbarScrollEffect() {
-        const navbar = document.querySelector('.navbar-glass');
-        if (!navbar) return;
-
-        let lastScroll = 0;
-        let ticking = false;
-
-        window.addEventListener('scroll', () => {
-            lastScroll = window.scrollY;
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    if (lastScroll > 60) {
-                        navbar.style.padding = '0.45rem 1.75rem';
-                        navbar.style.backdropFilter = 'blur(24px) saturate(1.6)';
-                        navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
-                    } else {
-                        navbar.style.padding = '';
-                        navbar.style.backdropFilter = '';
-                        navbar.style.boxShadow = '';
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-    }
-
-    // --- 10f. Smooth Badge Pulse on Stat Values ---
-    function initStatValuePulse() {
-        const statValues = document.querySelectorAll('.stat-value');
-        statValues.forEach(val => {
-            val.style.animation = 'fadeInScale 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both';
-        });
-
-        // Add shimmer to brand-tag badges
-        const brandTags = document.querySelectorAll('.brand-tag');
-        brandTags.forEach(tag => {
-            tag.style.background = 'linear-gradient(90deg, var(--color-emerald) 0%, var(--color-cyan) 50%, var(--color-emerald) 100%)';
-            tag.style.backgroundSize = '200% auto';
-            tag.style.webkitBackgroundClip = 'text';
-            tag.style.webkitTextFillColor = 'transparent';
-            tag.style.animation = 'shimmer 3s linear infinite';
-        });
-    }
-
-    // --- 10g. Timeline Node Staggered Reveal ---
-    function initTimelineAnimation() {
-        const nodes = document.querySelectorAll('.timeline-node');
-        if (!nodes.length) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const node = entry.target;
-                const index = Array.from(nodes).indexOf(node);
-                node.style.animation = `slideInFromRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${index * 80}ms both`;
-                observer.unobserve(node);
-            });
-        }, { threshold: 0.1 });
-
-        nodes.forEach(node => {
-            node.style.opacity = '0';
-            observer.observe(node);
-        });
-    }
-
-    // --- 10h. Table Row Staggered Cascade ---
-    function initTableRowAnimation() {
-        const rows = document.querySelectorAll('.data-table tbody tr');
-        if (!rows.length) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-
-                const table = entry.target.closest('table');
-                if (!table || table.dataset.animated) return;
-                table.dataset.animated = 'true';
-
-                const allRows = table.querySelectorAll('tbody tr');
-                allRows.forEach((row, i) => {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(-16px)';
-                    setTimeout(() => {
-                        row.style.transition = 'opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-                        row.style.opacity = '1';
-                        row.style.transform = 'translateX(0)';
-                    }, i * 50);
-                });
-
-                observer.unobserve(entry.target);
-            });
-        }, { threshold: 0.05 });
-
-        // Observe just the first row to trigger the cascade
-        if (rows[0]) observer.observe(rows[0]);
-    }
-
-    // --- 10i. Page Load Wipe Transition ---
-    function initPageTransition() {
-        // Create a full-screen wipe overlay
-        const wipe = document.createElement('div');
-        wipe.style.cssText = `
-            position: fixed; inset: 0; z-index: 99999;
-            background: linear-gradient(135deg, #05070d 0%, #0a0f1a 100%);
-            pointer-events: none;
-            transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-        `;
-        document.body.prepend(wipe);
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                wipe.style.opacity = '0';
-                wipe.style.transform = 'scaleY(0)';
-                wipe.style.transformOrigin = 'top';
-                setTimeout(() => wipe.remove(), 500);
-            });
-        });
-    }
-
-    // --- 10j. Cursor Trail Glow (Subtle) ---
-    function initCursorGlow() {
-        const glow = document.createElement('div');
-        glow.style.cssText = `
-            position: fixed; pointer-events: none; z-index: 9998;
-            width: 300px; height: 300px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: left 0.15s ease-out, top 0.15s ease-out;
-            will-change: left, top;
-        `;
-        document.body.appendChild(glow);
-
-        document.addEventListener('mousemove', (e) => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
-        }, { passive: true });
     }
 
     // =========================================================================
-    // 11. DOM READY — FULL INITIALIZATION SEQUENCE
+    // 10. APPROVAL CELEBRATION HOOK
+    // =========================================================================
+    function initApprovalHooks() {
+        document.querySelectorAll('form[action^="/campaigns/"][action$="/approve"]').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                const btn = form.querySelector('button[type="submit"]');
+                if (btn) {
+                    const rect = btn.getBoundingClientRect();
+                    triggerConfetti(rect.left + rect.width / 2, rect.top);
+                    sfx.success();
+                }
+            });
+        });
+    }
+
+    // =========================================================================
+    // 11. INITIALIZATION SEQUENCE
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Core systems
         initAmbientCanvas();
-        initCardSpotlights();
         animateCounters();
         initYieldSimulator();
         initCommandPalette();
         initSfxToggle();
         initScanEffects();
-
-        // Animmaster-quality motion layer
-        initPageTransition();
-        initTextSplitAnimation();
-        initScrollRevealSystem();
         initMagneticTilt();
-        initNavbarScrollEffect();
-        initStatValuePulse();
-        initTimelineAnimation();
-        initTableRowAnimation();
-        initCursorGlow();
+        initApprovalHooks();
 
-        // Acoustic haptics on interactive elements
-        document.querySelectorAll('.btn, .nav-link, .stat-card, .proposal-card, .filter-tab').forEach(el => {
+        // Audio ticks on interactive elements
+        document.querySelectorAll('.btn, .nav-link, .stat-card, .proposal-card, .filter-tab, .process-step-card').forEach(el => {
             el.addEventListener('mouseenter', () => sfx.tick());
         });
     });

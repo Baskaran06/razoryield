@@ -113,6 +113,49 @@
             </div>
         </div>
 
+        <!-- How RazorYield Works: 3-Step Clear Explainer Process -->
+        <div class="process-pipeline-banner">
+            <div class="process-banner-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>How RazorYield Works — 3-Step Automated Clearance Engine</span>
+                <span class="badge badge-emerald" style="margin-left:auto; font-size:0.72rem;">Zero Manual Hassle</span>
+            </div>
+            <div class="process-steps-grid">
+                <div class="process-step-card">
+                    <div class="process-step-num">
+                        <span class="badge badge-emerald" style="padding:0.15rem 0.45rem;">Step 1</span>
+                        <span>Stagnation Scan</span>
+                    </div>
+                    <div class="process-step-name">Detect Idle Inventory</div>
+                    <div class="process-step-desc">Identifies slow-moving products sitting idle 30+ days that trap valuable merchant working capital.</div>
+                </div>
+                <div class="process-step-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+                <div class="process-step-card">
+                    <div class="process-step-num">
+                        <span class="badge badge-indigo" style="padding:0.15rem 0.45rem;">Step 2</span>
+                        <span>AI Pricing + 15% Floor</span>
+                    </div>
+                    <div class="process-step-name">Safe Dynamic Discount</div>
+                    <div class="process-step-desc">Spring AI calculates optimal clearance discount while mathematically locking the 15% profit floor.</div>
+                </div>
+                <div class="process-step-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+                <div class="process-step-card">
+                    <div class="process-step-num">
+                        <span class="badge badge-amber" style="padding:0.15rem 0.45rem;">Step 3</span>
+                        <span>Razorpay Settlement</span>
+                    </div>
+                    <div class="process-step-name">1-Click Payouts</div>
+                    <div class="process-step-desc">Authorize with 1 click; instant Razorpay payment links liquidate stock with HMAC verified settlements.</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Hero Performance Stat Grid -->
         <div class="hero-grid">
             <div class="card-glass stat-card stat-card-emerald">
@@ -213,72 +256,72 @@
         </div>
 
         <!-- REAL-TIME AI YIELD & MARGIN SIMULATOR (LIVE INTERACTIVE WIDGET) -->
-        <div class="simulator-container">
+        <div class="simulator-box">
             <div class="simulator-header">
                 <div>
                     <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-cyan)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                        <span style="font-size:1.15rem; font-weight:800; color:#ffffff; font-family:var(--font-display);">Real-Time AI Yield &amp; Clearance Simulator</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-indigo)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        <span style="font-size:1.15rem; font-weight:800; color:var(--text-title); font-family:var(--font-display);">Real-Time AI Yield &amp; Clearance Simulator</span>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Adjust parameters to test discount elasticity, liquidation velocity, and margin floor retention before launching campaigns.</p>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Adjust discount elasticity to simulate velocity gains, recovered capital, and 15% margin floor protection before launching live flash campaigns.</p>
                 </div>
-                <span class="badge badge-indigo">Interactive Model</span>
+                <span class="badge badge-indigo">Interactive Yield Model</span>
             </div>
 
             <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:1.8rem; align-items:center;">
                 <div>
-                    <div class="slider-group">
-                        <div class="slider-label-row">
-                            <span style="font-weight:600; color:var(--text-title);">Target Clearance Discount</span>
-                            <span class="number-font text-cyan" style="font-size:1.1rem; font-weight:700;" id="simDiscountVal">20%</span>
+                    <div style="margin-bottom:1.25rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                            <span style="font-weight:700; color:var(--text-title); font-size:0.92rem;">Target Clearance Discount</span>
+                            <span class="number-font text-emerald" style="font-size:1.2rem; font-weight:800;" id="simDiscountVal">20%</span>
                         </div>
-                        <input type="range" class="custom-range" id="simDiscountSlider" min="5" max="50" value="20" step="1">
-                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-top:0.35rem;">
+                        <input type="range" class="simulator-range" id="simDiscountSlider" min="5" max="50" value="20" step="1">
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); margin-top:0.4rem;">
                             <span>5% (Conservative)</span>
-                            <span>25% (Balanced)</span>
+                            <span>25% (Balanced Velocity)</span>
                             <span>50% (Aggressive Clearance)</span>
                         </div>
                     </div>
 
-                    <div class="sim-metrics-grid">
-                        <div>
-                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Clearance Velocity</div>
-                            <div class="number-font text-emerald" style="font-size:1.15rem; font-weight:700;" id="simVelocityVal">48% in 48h</div>
+                    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.75rem;">
+                        <div class="sim-metric-card">
+                            <div class="sim-metric-label">Clearance Velocity</div>
+                            <div class="number-font text-emerald" style="font-size:1.05rem; font-weight:800;" id="simVelocityVal">48% in 48h</div>
                         </div>
-                        <div>
-                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Projected Capital</div>
-                            <div class="number-font text-cyan" style="font-size:1.15rem; font-weight:700;" id="simRevenueVal">₹1,18,400</div>
+                        <div class="sim-metric-card">
+                            <div class="sim-metric-label">Projected Capital</div>
+                            <div class="number-font text-title" style="font-size:1.05rem; font-weight:800;" id="simRevenueVal">₹1,18,400</div>
                         </div>
-                        <div>
-                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Margin Floor Status</div>
-                            <div class="number-font text-emerald" style="font-size:0.95rem; font-weight:700;" id="simMarginHealthVal">Optimal (>22% ROI)</div>
+                        <div class="sim-metric-card">
+                            <div class="sim-metric-label">Margin Floor</div>
+                            <div class="number-font text-emerald" style="font-size:0.95rem; font-weight:800;" id="simMarginHealthVal">Safe (&gt;22%)</div>
                         </div>
-                        <div>
-                            <div style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase;">Razorpay Settlement</div>
-                            <div class="number-font text-title" style="font-size:0.95rem; font-weight:700;">T+0 Direct</div>
+                        <div class="sim-metric-card">
+                            <div class="sim-metric-label">Settlement</div>
+                            <div class="number-font text-title" style="font-size:0.95rem; font-weight:800;">T+0 Direct</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Morphing SVG Curve -->
-                <div style="background:rgba(0,0,0,0.4); border-radius:var(--radius-md); padding:1rem; border:1px solid var(--border-subtle); display:flex; flex-direction:column; align-items:center;">
-                    <div style="font-size:0.75rem; font-weight:600; color:var(--text-muted); margin-bottom:0.5rem; width:100%; display:flex; justify-content:space-between;">
+                <div style="background:#f8fafc; border-radius:var(--radius-md); padding:1.2rem; border:1px solid var(--border-subtle); display:flex; flex-direction:column; align-items:center;">
+                    <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.65rem; width:100%; display:flex; justify-content:space-between;">
                         <span>ELASTICITY YIELD CURVE</span>
-                        <span class="text-cyan number-font">Real-time projection</span>
+                        <span class="badge badge-emerald" style="font-size:0.68rem;">Real-time</span>
                     </div>
                     <svg width="290" height="110" viewBox="0 0 290 110" style="overflow:visible;">
                         <defs>
                             <linearGradient id="curveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.4"/>
-                                <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.0"/>
+                                <stop offset="0%" stop-color="#059669" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#059669" stop-opacity="0.0"/>
                             </linearGradient>
                         </defs>
                         <!-- Grid Lines -->
-                        <line x1="10" y1="25" x2="280" y2="25" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
-                        <line x1="10" y1="55" x2="280" y2="55" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
-                        <line x1="10" y1="85" x2="280" y2="85" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3,3"/>
+                        <line x1="10" y1="25" x2="280" y2="25" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                        <line x1="10" y1="55" x2="280" y2="55" stroke="#e2e8f0" stroke-dasharray="3,3"/>
+                        <line x1="10" y1="85" x2="280" y2="85" stroke="#e2e8f0" stroke-dasharray="3,3"/>
                         <!-- Dynamic Morph Curve -->
-                        <path id="simYieldCurve" d="M 10 90 Q 70 65, 140 50, 210 38, 280 25 L 280 110 L 10 110 Z" fill="url(#curveGradient)" stroke="#06b6d4" stroke-width="2.5" style="transition:d 0.25s ease;"/>
+                        <path id="simYieldCurve" d="M 10 90 Q 70 65, 140 50, 210 38, 280 25 L 280 110 L 10 110 Z" fill="url(#curveGradient)" stroke="#059669" stroke-width="2.5" style="transition:d 0.25s ease;"/>
                     </svg>
                 </div>
             </div>

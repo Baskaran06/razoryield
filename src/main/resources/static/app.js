@@ -121,7 +121,8 @@
     const sfx = new SoundEngine();
 
     // =========================================================================
-    // 2. LUXURY SILKY FLUID RIBBON & MESH CANVAS (Apple/Stripe Light Mode)
+    // =========================================================================
+    // 2. SOVEREIGN GUILLOCHÉ & ROYAL CURRENCY LATHE (Retina 60FPS Canvas Engine)
     // =========================================================================
     function initAmbientCanvas() {
         const canvas = document.getElementById('ambientCanvas');
@@ -129,101 +130,162 @@
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
+        let dpr = window.devicePixelRatio || 1;
+        let width = window.innerWidth;
+        let height = window.innerHeight;
 
-        const mouse = { x: width * 0.5, y: height * 0.3, targetX: width * 0.5, targetY: height * 0.3, active: false };
+        function resize() {
+            dpr = window.devicePixelRatio || 1;
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
 
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-
+        const mouse = { x: width * 0.5, y: height * 0.4, targetX: width * 0.5, targetY: height * 0.4 };
         window.addEventListener('mousemove', (e) => {
             mouse.targetX = e.clientX;
             mouse.targetY = e.clientY;
-            mouse.active = true;
         }, { passive: true });
 
-        // Ribbons definition: harmonic undulating smooth curves
-        const ribbons = [
-            { baseY: height * 0.22, amplitude: 55, speed: 0.008, freq: 0.0016, color: 'rgba(5, 150, 105, 0.06)', width: 3 },
-            { baseY: height * 0.35, amplitude: 70, speed: 0.006, freq: 0.0012, color: 'rgba(79, 70, 229, 0.05)', width: 2.5 },
-            { baseY: height * 0.52, amplitude: 60, speed: 0.007, freq: 0.0014, color: 'rgba(6, 182, 212, 0.04)', width: 2 },
-            { baseY: height * 0.70, amplitude: 85, speed: 0.005, freq: 0.0010, color: 'rgba(16, 185, 129, 0.05)', width: 3 },
-            { baseY: height * 0.88, amplitude: 50, speed: 0.009, freq: 0.0018, color: 'rgba(99, 102, 241, 0.04)', width: 2 }
+        // Guilloché Bands: Royal Currency security waveforms with phase-interlocked strands
+        const bands = [
+            {
+                name: 'Imperial Indigo & Platinum',
+                baseYRatio: 0.22,
+                strands: 9,
+                strandSpacing: 0.14,
+                amp1: 46,
+                amp2: 24,
+                freq1: 0.0015,
+                freq2: 0.0032,
+                speed: 0.006,
+                colors: [
+                    'rgba(67, 56, 202, 0.055)',
+                    'rgba(79, 70, 229, 0.045)',
+                    'rgba(99, 102, 241, 0.040)',
+                    'rgba(148, 163, 184, 0.035)'
+                ]
+            },
+            {
+                name: 'Royal Champagne & Sovereign Emerald',
+                baseYRatio: 0.52,
+                strands: 11,
+                strandSpacing: 0.12,
+                amp1: 58,
+                amp2: 30,
+                freq1: 0.0012,
+                freq2: 0.0026,
+                speed: 0.0045,
+                colors: [
+                    'rgba(217, 119, 6, 0.050)',
+                    'rgba(5, 150, 105, 0.055)',
+                    'rgba(180, 83, 9, 0.045)',
+                    'rgba(16, 185, 129, 0.045)'
+                ]
+            },
+            {
+                name: 'Treasury Emerald & Slate Silk',
+                baseYRatio: 0.80,
+                strands: 8,
+                strandSpacing: 0.15,
+                amp1: 42,
+                amp2: 20,
+                freq1: 0.0018,
+                freq2: 0.0036,
+                speed: 0.007,
+                colors: [
+                    'rgba(5, 150, 105, 0.050)',
+                    'rgba(16, 185, 129, 0.040)',
+                    'rgba(100, 116, 139, 0.035)'
+                ]
+            }
         ];
 
-        // Soft floating ambient glow spheres
-        const spheres = [
-            { x: width * 0.2, y: height * 0.25, r: 240, vx: 0.3, vy: 0.2, color: 'rgba(16, 185, 129, 0.04)' },
-            { x: width * 0.8, y: height * 0.35, r: 300, vx: -0.25, vy: 0.2, color: 'rgba(79, 70, 229, 0.035)' },
-            { x: width * 0.5, y: height * 0.75, r: 280, vx: 0.2, vy: -0.25, color: 'rgba(6, 182, 212, 0.035)' }
+        // Soft luminous pearl auras that give paper-like depth to pure white
+        const auras = [
+            { x: width * 0.25, y: height * 0.28, r: 340, vx: 0.25, vy: 0.15, color: 'rgba(217, 119, 6, 0.025)' },
+            { x: width * 0.78, y: height * 0.42, r: 380, vx: -0.2, vy: 0.18, color: 'rgba(5, 150, 105, 0.030)' },
+            { x: width * 0.48, y: height * 0.78, r: 360, vx: 0.18, vy: -0.22, color: 'rgba(79, 70, 229, 0.025)' }
         ];
 
         let tick = 0;
 
         function render() {
             tick++;
-            // Smooth mouse interpolation (spring dampening)
-            mouse.x += (mouse.targetX - mouse.x) * 0.06;
-            mouse.y += (mouse.targetY - mouse.y) * 0.06;
+            // Silky smooth mouse dampening
+            mouse.x += (mouse.targetX - mouse.x) * 0.05;
+            mouse.y += (mouse.targetY - mouse.y) * 0.05;
 
             ctx.clearRect(0, 0, width, height);
 
-            // 1. Draw floating soft aura spheres
-            spheres.forEach(s => {
-                s.x += s.vx;
-                s.y += s.vy;
-                if (s.x - s.r < 0 || s.x + s.r > width) s.vx *= -1;
-                if (s.y - s.r < 0 || s.y + s.r > height) s.vy *= -1;
+            // 1. Render soft royal ambient auras
+            for (let i = 0; i < auras.length; i++) {
+                const a = auras[i];
+                a.x += a.vx;
+                a.y += a.vy;
+                if (a.x - a.r < 0 || a.x + a.r > width) a.vx *= -1;
+                if (a.y - a.r < 0 || a.y + a.r > height) a.vy *= -1;
 
-                const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r);
-                grad.addColorStop(0, s.color);
+                const grad = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, a.r);
+                grad.addColorStop(0, a.color);
                 grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
                 ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
                 ctx.fill();
-            });
+            }
 
-            // 2. Draw silky harmonic ribbons with mouse ripple physics
-            ribbons.forEach((r, idx) => {
-                ctx.beginPath();
-                ctx.lineWidth = r.width;
-                ctx.strokeStyle = r.color;
+            // 2. Render Sovereign Guilloché interlocking mathematical ribbons
+            const step = 16;
+            for (let b = 0; b < bands.length; b++) {
+                const band = bands[b];
+                const baseY = height * band.baseYRatio;
+                const time = tick * band.speed;
 
-                const step = 20;
-                let started = false;
+                for (let s = 0; s < band.strands; s++) {
+                    const phaseOffset = s * band.strandSpacing;
+                    const strokeColor = band.colors[s % band.colors.length];
 
-                for (let x = 0; x <= width + step; x += step) {
-                    // Base harmonic sine waves
-                    const timeOffset = tick * r.speed + idx * 2.0;
-                    let wave = Math.sin(x * r.freq + timeOffset) * r.amplitude
-                             + Math.cos(x * r.freq * 0.5 + timeOffset * 0.8) * (r.amplitude * 0.5);
+                    ctx.beginPath();
+                    ctx.lineWidth = 1.1;
+                    ctx.strokeStyle = strokeColor;
 
-                    // Interactive mouse displacement
-                    const dx = x - mouse.x;
-                    const dy = (r.baseY + wave) - mouse.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const maxDist = 280;
+                    let started = false;
+                    for (let x = -20; x <= width + 20; x += step) {
+                        // Mathematical dual-harmonic guilloché equation
+                        const w1 = Math.sin(x * band.freq1 + time + phaseOffset) * band.amp1;
+                        const w2 = Math.cos(x * band.freq2 - time * 0.8 + phaseOffset * 1.6) * band.amp2;
+                        const w3 = Math.sin((x * 0.0006) + time * 0.4 + phaseOffset) * 14;
 
-                    if (dist < maxDist) {
-                        const factor = (1 - dist / maxDist);
-                        wave += Math.sin(factor * Math.PI) * 45 * (dy > 0 ? 1 : -1);
+                        // Interactive cursor magnetic deflection
+                        const dx = x - mouse.x;
+                        const dy = (baseY + w1 + w2) - mouse.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const maxDist = 300;
+                        let mouseDeflection = 0;
+                        if (dist < maxDist) {
+                            const factor = 1 - dist / maxDist;
+                            mouseDeflection = Math.sin(factor * Math.PI) * 36 * (dy > 0 ? 1 : -1);
+                        }
+
+                        const y = baseY + w1 + w2 + w3 + mouseDeflection;
+
+                        if (!started) {
+                            ctx.moveTo(x, y);
+                            started = true;
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
                     }
-
-                    const y = r.baseY + wave;
-
-                    if (!started) {
-                        ctx.moveTo(x, y);
-                        started = true;
-                    } else {
-                        ctx.lineTo(x, y);
-                    }
+                    ctx.stroke();
                 }
-                ctx.stroke();
-            });
+            }
 
             requestAnimationFrame(render);
         }

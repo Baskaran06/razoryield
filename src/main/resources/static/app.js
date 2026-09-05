@@ -338,79 +338,10 @@
     }
 
     // =========================================================================
-    // 5. UNIVERSAL COMMAND PALETTE (⌘K / Ctrl+K)
     // =========================================================================
-    function initCommandPalette() {
-        const triggers = document.querySelectorAll('.command-palette-trigger');
-        let backdrop = document.querySelector('.cmd-palette-backdrop');
+    // 5. REMOVED UNNECESSARY PALETTE
+    // =========================================================================
 
-        if (!backdrop) {
-            backdrop = document.createElement('div');
-            backdrop.className = 'cmd-palette-backdrop';
-            backdrop.innerHTML = `
-                <div class="cmd-palette-modal" role="dialog" aria-modal="true">
-                    <div class="cmd-input-wrapper">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" class="cmd-input" placeholder="Search commands, navigate routes, or filter..." autofocus>
-                        <span style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-mono); background:#f1f5f9; padding:0.2rem 0.45rem; border-radius:4px;">ESC</span>
-                    </div>
-                    <ul class="cmd-list">
-                        <li class="cmd-item" data-action="route-dash"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</span> <span class="badge badge-slate">Go</span></li>
-                        <li class="cmd-item" data-action="route-camp"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Campaigns</span> <span class="badge badge-slate">Go</span></li>
-                        <li class="cmd-item" data-action="route-inv"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Inventory Matrix</span> <span class="badge badge-slate">Go</span></li>
-                        <li class="cmd-item" data-action="route-pay"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Settlement Ledger</span> <span class="badge badge-slate">Go</span></li>
-                        <li class="cmd-item" data-action="scan"><span style="display:flex; align-items:center; gap:0.6rem;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Run Clearance Scan</span> <span class="badge badge-emerald">Action</span></li>
-                    </ul>
-                </div>
-            `;
-            document.body.appendChild(backdrop);
-        }
-
-        const input = backdrop.querySelector('.cmd-input');
-        const items = backdrop.querySelectorAll('.cmd-item');
-
-        function openPalette() {
-            backdrop.classList.add('open');
-            input.value = '';
-            input.focus();
-            sfx.click();
-        }
-
-        function closePalette() {
-            backdrop.classList.remove('open');
-        }
-
-        triggers.forEach(t => t.addEventListener('click', openPalette));
-
-        backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop) closePalette();
-        });
-
-        window.addEventListener('keydown', (e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                backdrop.classList.contains('open') ? closePalette() : openPalette();
-            } else if (e.key === 'Escape' && backdrop.classList.contains('open')) {
-                closePalette();
-            }
-        });
-
-        items.forEach(item => {
-            item.addEventListener('click', () => {
-                const action = item.getAttribute('data-action');
-                closePalette();
-                if (action === 'route-dash') window.location.href = '/';
-                else if (action === 'route-camp') window.location.href = '/campaigns';
-                else if (action === 'route-inv') window.location.href = '/inventory';
-                else if (action === 'route-pay') window.location.href = '/payments';
-                else if (action === 'scan') {
-                    const scanForm = document.getElementById('orchestrateForm');
-                    if (scanForm) scanForm.submit();
-                    else window.location.href = '/';
-                }
-            });
-        });
-    }
 
     // =========================================================================
     // 6. CONFETTI CELEBRATION BURST ENGINE
@@ -539,7 +470,6 @@
         initAmbientCanvas();
         animateCounters();
         initYieldSimulator();
-        initCommandPalette();
         initSfxToggle();
         initScanEffects();
         initMagneticTilt();

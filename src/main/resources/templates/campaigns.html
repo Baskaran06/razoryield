@@ -27,7 +27,7 @@
                     RazorYield
                     <span class="brand-tag">Campaigns</span>
                 </div>
-                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale &amp; Margin Guardrail Engine</div>
+                
             </div>
         </div>
 
@@ -60,10 +60,7 @@
 
         <div class="nav-actions">
             <!-- Command Palette Trigger -->
-            <button type="button" class="command-kbd-chip command-palette-trigger" title="Open Quick Command Bar">
-                <span>Quick Actions</span>
-                <span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:rgba(255,255,255,0.1); padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span>
-            </button>
+            
 
             <!-- SFX Toggle -->
             <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle" title="Toggle Acoustic Haptics">
@@ -84,7 +81,7 @@
         <div class="page-header">
             <div>
                 <h1 class="page-title">Flash Sale Campaigns</h1>
-                <p class="page-subtitle">Track active promotional campaigns, discounts, and customer checkout links.</p>
+                
             </div>
             <div>
                 <a th:href="@{/}" class="btn btn-emerald">
@@ -187,10 +184,7 @@
 </div>
 
 <!-- Floating Toast Notification -->
-<div class="toast-notification" id="toast">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-emerald)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-    <span id="toastMsg" style="font-weight:600; color:#ffffff;">Link copied to clipboard!</span>
-</div>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

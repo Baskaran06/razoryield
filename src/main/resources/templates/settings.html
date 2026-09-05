@@ -19,7 +19,7 @@
             </div>
             <div>
                 <div class="brand-title">RazorYield <span class="brand-tag">Settings</span></div>
-                <div style="font-size:0.7rem; color:var(--text-muted); font-weight:500;">Flash Sale &amp; Margin Guardrail Engine</div>
+                
             </div>
         </div>
         <ul class="nav-links">
@@ -31,7 +31,7 @@
             <li><a th:href="@{/settings}" class="nav-link active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</a></li>
         </ul>
         <div class="nav-actions">
-            <button type="button" class="command-kbd-chip command-palette-trigger"><span>Quick Actions</span><span style="font-family:var(--font-mono); font-weight:700; color:var(--text-title); background:rgba(255,255,255,0.1); padding:0.1rem 0.35rem; border-radius:4px;">⌘K</span></button>
+            
             <button type="button" id="sfxToggleBtn" class="btn btn-sm btn-emerald-subtle"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg><span>SFX: ON</span></button>
             <div class="header-status-pill"><span class="pulse-dot"></span><span>Razorpay Active</span></div>
         </div>
@@ -41,7 +41,7 @@
         <div class="page-header anim-reveal">
             <div>
                 <h1 class="page-title">Settings &amp; Safety Limits</h1>
-                <p class="page-subtitle">Manage your store security key, daily discount caps, and payment gateway configuration.</p>
+                
             </div>
         </div>
 
@@ -88,12 +88,12 @@
                         <div style="background:#f8fafc; padding:1.15rem; border-radius:var(--radius-sm); border:1px solid #e2e8f0;">
                             <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Minimum Profit Floor</div>
                             <div class="number-font" style="font-size:1.65rem; font-weight:800; color:var(--color-emerald-dark); margin-top:0.35rem;">15.0%</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">Guaranteed profit margin</div>
+                            
                         </div>
                         <div style="background:#f8fafc; padding:1.15rem; border-radius:var(--radius-sm); border:1px solid #e2e8f0;">
                             <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Daily Discount Cap</div>
                             <div class="number-font" style="font-size:1.65rem; font-weight:800; color:var(--text-title); margin-top:0.35rem;" th:text="'₹' + ${#numbers.formatDecimal(dailyCapPaise / 100.0, 1, 'COMMA', 0, 'POINT')}">₹20,000</div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.25rem;">Daily safety limit</div>
+                            
                         </div>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                     <div style="display:flex; align-items:center; justify-content:space-between; gap:2rem;">
                         <div>
                             <div style="font-weight:700; color:var(--text-title); font-size:1rem;">Active Mode: Test Gateway</div>
-                            <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.25rem;">Customer payments and simulated test checkouts are active.</div>
+                            
                         </div>
                         <span class="badge badge-indigo" style="padding:0.4rem 0.75rem;">Test Mode</span>
                     </div>
